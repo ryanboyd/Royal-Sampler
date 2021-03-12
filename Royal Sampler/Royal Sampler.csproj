@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <RootNamespace>royalsampler</RootNamespace>
+    <UseWindowsForms>true</UseWindowsForms>
+    <StartupObject>royalsampler.Program</StartupObject>
+    <ApplicationIcon>king.ico</ApplicationIcon>
+  </PropertyGroup>
+
+</Project>
