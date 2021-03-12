@@ -19,9 +19,8 @@ namespace royalsampler
         /// This is an object that contains all of the file input details, including things like file encoding and delimiter characters.
         /// </summary>
         private FileDetails deckOfCards;
-
-
-
+        public int numberOfSamples { get; set; }
+        public int rowsPerSample { get; set; }
         private bool allowReplacement { get; set; }
 
 
@@ -114,6 +113,20 @@ namespace royalsampler
             return this.deckOfCards.fileEncoding;
         }
 
+        public bool HasHeader()
+        {
+            return this.deckOfCards.containsHeader;
+        }
+        public char GetDelim()
+        {
+            return this.deckOfCards.delimiter;
+        }
+
+        public char GetQuote()
+        {
+            return this.deckOfCards.quote;
+        }
+
 
     }
 
@@ -132,10 +145,9 @@ namespace royalsampler
         /// This can be referred to in order to figure out which rows have already been sampled. Only useful for if we're not allowing replacement.
         /// </summary>
         /// 
-        internal HashSet<ulong> previouslySampledSet { get; set; }
-
+        
         internal bool containsHeader { get; set; }
-        internal int numberOfSamples { get; set; }
+        
 
         internal FileDetails(string fileIn, bool containsHead, Encoding fEncode, char quotechar, char delimchar)
         {
@@ -145,7 +157,6 @@ namespace royalsampler
             quote = quotechar;
             delimiter = delimchar;
 
-            previouslySampledSet = new HashSet<ulong>();
         }
     }
 

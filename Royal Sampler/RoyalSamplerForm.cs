@@ -134,6 +134,8 @@ namespace royalsampler
             QuoteTextBox.Enabled = false;
             ContainsHeaderCheckbox.Enabled = false;
             OpenFileButton.Enabled = false;
+            NumSubsamplesTextbox.Enabled = false;
+            RowsPerSampleTextbox.Enabled = false;
 
             AllowReplacementsCheckbox.Enabled = false;
             EnableProgBar();
@@ -146,6 +148,8 @@ namespace royalsampler
             QuoteTextBox.Enabled = true;
             ContainsHeaderCheckbox.Enabled = true;
             OpenFileButton.Enabled = true;
+            NumSubsamplesTextbox.Enabled = true;
+            RowsPerSampleTextbox.Enabled = true;
 
             AllowReplacementsCheckbox.Enabled = true;
             DisableProgBar();
@@ -204,6 +208,7 @@ namespace royalsampler
             }
 
 
+             
 
 
             FolderBrowserDialog folderBrowser = new FolderBrowserDialog();
@@ -220,6 +225,8 @@ namespace royalsampler
 
 
                 hoju.SetOutputFolder(folderBrowser.SelectedPath);
+                hoju.numberOfSamples.
+
 
                 DisableControls();
 

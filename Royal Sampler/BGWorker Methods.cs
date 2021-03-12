@@ -52,15 +52,18 @@ namespace royalsampler
 
 
 
+
+
+
             using (var stream = File.OpenRead(homer.GetInputFolder()))
-            using (var reader = new StreamReader(stream, encoding: this.deckOfCards.fileEncoding))
+            using (var reader = new StreamReader(stream, encoding: homer.GetEncoding()))
             {
-                if (deckOfCards.containsHeader)
-                {
-                    var csvDat = CsvParser.ParseHeadAndTail(reader, deckOfCards.delimiter, deckOfCards.quote);
+                if (homer.HasHeader())               {
+                    var csvDat = CsvParser.ParseHeadAndTail(reader, homer.GetDelim(), homer.GetQuote());
+                    
                     try
                     {
-                        foreach (var line in csvDat.Item2) { this.deckOfCards.totalNumberOfRows++; }
+                        foreach (var line in csvDat.Item2) {  }
                     }
                     catch
                     {
@@ -69,10 +72,10 @@ namespace royalsampler
                 }
                 else
                 {
-                    var csvDat = CsvParser.Parse(reader, deckOfCards.delimiter, deckOfCards.quote);
+                    var csvDat = CsvParser.Parse(reader, homer.GetDelim(), homer.GetQuote());
                     try
                     {
-                        foreach (var line in csvDat) { this.deckOfCards.totalNumberOfRows++; }
+                        foreach (var line in csvDat) {  }
                     }
                     catch
                     {
