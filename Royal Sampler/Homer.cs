@@ -103,7 +103,7 @@ namespace royalsampler
         {
             return this.deckOfCards.outputFolder;
         }
-        public string GetInputFolder()
+        public string GetInputFile()
         {
             return this.deckOfCards.inputFileLocation;
         }

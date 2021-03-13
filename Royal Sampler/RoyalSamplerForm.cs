@@ -110,6 +110,7 @@ namespace royalsampler
 
 
             DisableControls();
+            EnableProgBarPct();
             NumRowsLabel.Text = "Counting rows of data...";
 
             //let's get counting, but on a background thread
@@ -138,7 +139,7 @@ namespace royalsampler
             RowsPerSampleTextbox.Enabled = false;
 
             AllowReplacementsCheckbox.Enabled = false;
-            EnableProgBar();
+            
         }
 
         private void EnableControls()
@@ -152,16 +153,24 @@ namespace royalsampler
             RowsPerSampleTextbox.Enabled = true;
 
             AllowReplacementsCheckbox.Enabled = true;
-            DisableProgBar();
+            
         }
 
 
 
 
 
-        private void EnableProgBar() {
+        private void EnableProgBarNeverEnding() {
             MainProgressBar.Style = ProgressBarStyle.Marquee;
             MainProgressBar.MarqueeAnimationSpeed = 30;
+        }
+
+        private void EnableProgBarPct()
+        {
+            MainProgressBar.Style = ProgressBarStyle.Blocks;
+            MainProgressBar.Minimum = 0;
+            MainProgressBar.Maximum = 100;
+            MainProgressBar.Value = 0;
         }
 
         private void DisableProgBar()
@@ -232,10 +241,10 @@ namespace royalsampler
                 DisableControls();
 
                 BackgroundWorker theDealer = new BackgroundWorker();
-                theDealer.WorkerReportsProgress = false;
                 theDealer.DoWork += new DoWorkEventHandler(backgroundWorker_SubSample);
                 theDealer.ProgressChanged += new ProgressChangedEventHandler(backgroundWorker_SubSampleProgressChanged);
                 theDealer.RunWorkerCompleted += new RunWorkerCompletedEventHandler(backgroundWorker_SubSampleRunWorkerCompleted);
+                theDealer.WorkerReportsProgress = true;
 
 
                 theDealer.RunWorkerAsync(hoju);
