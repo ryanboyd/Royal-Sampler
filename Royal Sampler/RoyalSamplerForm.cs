@@ -225,8 +225,9 @@ namespace royalsampler
 
 
                 hoju.SetOutputFolder(folderBrowser.SelectedPath);
-                hoju.numberOfSamples.
-
+                hoju.numberOfSamples = int.Parse(NumSubsamplesTextbox.Text);
+                hoju.rowsPerSample = int.Parse(RowsPerSampleTextbox.Text);
+                hoju.allowReplacement = AllowReplacementsCheckbox.Checked;
 
                 DisableControls();
 

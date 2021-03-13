@@ -45,11 +45,20 @@ namespace royalsampler
         private void backgroundWorker_SubSample(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
             Homer homer = (Homer)e.Argument;
-            HashSet<ulong> drawnCards;
+            
+            
+
+            
+            for (int sampleNumber = 0; sampleNumber < homer.numberOfSamples; sampleNumber++)
+            {
+                
+                if (homer.allowReplacement)
+                {
+
+                }
 
 
-
-
+            }
 
 
 

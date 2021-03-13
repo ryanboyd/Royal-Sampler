@@ -21,7 +21,7 @@ namespace royalsampler
         private FileDetails deckOfCards;
         public int numberOfSamples { get; set; }
         public int rowsPerSample { get; set; }
-        private bool allowReplacement { get; set; }
+        public bool allowReplacement { get; set; }
 
 
         /// <summary>
