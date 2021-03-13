@@ -47,8 +47,10 @@ namespace royalsampler
             DelimiterTextBox.Text = ",";
             QuoteTextBox.Text = "\"";
             ContainsHeaderCheckbox.Checked = true;
-            RowsPerSampleTextbox.Text = "1000";
-            NumSubsamplesTextbox.Text = "100000";
+            NumSubsamplesTextbox.Text = "1000";
+            RowsPerSampleTextbox.Text = "100000";
+            InputFileTextbox.Select();
+
 
             InputFileTextbox.Enabled = false;
             MainProgressBar.Minimum = 0;
@@ -142,6 +144,7 @@ namespace royalsampler
             OpenFileButton.Enabled = false;
             NumSubsamplesTextbox.Enabled = false;
             RowsPerSampleTextbox.Enabled = false;
+            RandomSeedTextBox.Enabled = false;
 
             AllowReplacementsCheckbox.Enabled = false;
             
@@ -156,9 +159,9 @@ namespace royalsampler
             OpenFileButton.Enabled = true;
             NumSubsamplesTextbox.Enabled = true;
             RowsPerSampleTextbox.Enabled = true;
+            RandomSeedTextBox.Enabled = true;
 
             AllowReplacementsCheckbox.Enabled = true;
-            
         }
 
         private void ChangeStartToCancelButton() 
@@ -182,14 +185,14 @@ namespace royalsampler
             MainProgressBar.MarqueeAnimationSpeed = 30;
         }
 
-        private void EnableProgBarPct()
-        {
-            MainProgressBar.Enabled = true;
-            MainProgressBar.Style = ProgressBarStyle.Blocks;
-            MainProgressBar.Minimum = 0;
-            MainProgressBar.Maximum = 100;
-            MainProgressBar.Value = 0;
-        }
+        //private void EnableProgBarPct()
+        //{
+        //    MainProgressBar.Enabled = true;
+        //    MainProgressBar.Style = ProgressBarStyle.Blocks;
+        //    MainProgressBar.Minimum = 0;
+        //    MainProgressBar.Maximum = 100;
+        //    MainProgressBar.Value = 0;
+        //}
 
         private void DisableProgBar()
         {
@@ -233,7 +236,7 @@ namespace royalsampler
                     return;
                 }
 
-                if (!int.TryParse(RandomSeedTextBox.Text, out numRowsPerSample) || !String.IsNullOrEmpty(RandomSeedTextBox.Text))
+                if (!int.TryParse(RandomSeedTextBox.Text, out numRowsPerSample) && !String.IsNullOrEmpty(RandomSeedTextBox.Text))
                 {
                     MessageBox.Show("Your random seed must be an integer. If you do not want to use a randomization seed, you can leave the \"Random Seed\" box blank.", "D'oh!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
@@ -261,12 +264,20 @@ namespace royalsampler
                 folderBrowser.UseDescriptionForTitle = true;
                 folderBrowser.ShowNewFolderButton = true;
                 folderBrowser.Description = "Please choose the OUTPUT location for your files";
+                
+                string inputPath = Path.GetDirectoryName(InputFileTextbox.Text);
+                if (!Path.EndsInDirectorySeparator(inputPath)) inputPath += Path.DirectorySeparatorChar;
 
-                folderBrowser.SelectedPath = Path.GetDirectoryName(InputFileTextbox.Text);
+                folderBrowser.SelectedPath = inputPath;
 
                 if (folderBrowser.ShowDialog() != DialogResult.Cancel)
                 {
 
+                    if (folderBrowser.SelectedPath == Path.GetDirectoryName(InputFileTextbox.Text))
+                    {
+                        MessageBox.Show("You cannot save your subsampled output files to the same folder as your input file.", "D'oh!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
 
                     hoju.SetOutputFolder(folderBrowser.SelectedPath);
                     hoju.numberOfSamples = int.Parse(NumSubsamplesTextbox.Text);
@@ -294,7 +305,9 @@ namespace royalsampler
                     theDealer.WorkerSupportsCancellation = true;
 
                     StatusLabel.Text = "Preparing to subsample...";
+                    EnableProgBarNeverEnding();
                     theDealer.RunWorkerAsync(hoju);
+
 
                 }
 

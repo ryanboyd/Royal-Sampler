@@ -47,6 +47,8 @@ namespace royalsampler
             DisableProgBar();
             StatusLabel.Text = "Dataset contains " + ToKMB(hoju.GetRowCount()) + " rows";
 
+            MessageBox.Show("Your file has been scanned. It contains " + ToKMB(hoju.GetRowCount()) + " rows.", "Woohoo!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
         }
         #endregion
 
@@ -71,7 +73,7 @@ namespace royalsampler
 
                 //report progress
                 //MessageBox.Show((((double)sampleNumber / homer.numberOfSamples) * 100).ToString());
-                int pctDone = (int)Math.Round((((double)sampleNumber / homer.numberOfSamples) * 100), 0, MidpointRounding.AwayFromZero);
+                int pctDone = (int)Math.Round((((double)sampleNumber / homer.numberOfSamples) * 10000), 0, MidpointRounding.AwayFromZero);
                 (sender as BackgroundWorker).ReportProgress(pctDone);
 
 
@@ -110,8 +112,16 @@ namespace royalsampler
                 #region Get Busy Writin' or Get Busy Dyin'
                 int rowsWritten = 0;
 
-                //first we need to open up our output file
-                string filenameOut = Path.Combine(homer.GetOutputFolder(), "subsample" + sampleNumber.ToString(filenamePadding) + ".csv");
+                //first we need to open up our output filename
+                string filenameOut;
+                if (String.IsNullOrEmpty(homer.randSeedString))
+                {
+                    filenameOut = Path.Combine(homer.GetOutputFolder(), "subsample" + (sampleNumber + 1).ToString(filenamePadding) + ".csv");
+                }
+                else
+                {
+                    filenameOut = Path.Combine(homer.GetOutputFolder(), homer.randSeedString + "_subsample" + (sampleNumber + 1).ToString(filenamePadding) + ".csv");
+                }
 
                 using (FileStream fileStreamOut = new FileStream(filenameOut, FileMode.Create, FileAccess.Write, FileShare.None))
                 using (StreamWriter streamWriter = new StreamWriter(fileStreamOut, homer.GetEncoding()))
@@ -188,15 +198,9 @@ namespace royalsampler
 
             }
 
-
-
-
-
-          
-
-
             return;
         }
+
 
 
         private void backgroundWorker_SubSampleWithoutReplacement(object sender, System.ComponentModel.DoWorkEventArgs e)
@@ -244,7 +248,7 @@ namespace royalsampler
                 if ((sender as BackgroundWorker).CancellationPending) break;
 
                 //report progress
-                int pctDone = (int)Math.Round((((double)sampleNumber / actualSamplesToBeWritten) * 100), 0, MidpointRounding.AwayFromZero);
+                int pctDone = (int)Math.Round((((double)sampleNumber / actualSamplesToBeWritten) * 10000), 0, MidpointRounding.AwayFromZero);
                 (sender as BackgroundWorker).ReportProgress(pctDone);
 
 
@@ -264,8 +268,18 @@ namespace royalsampler
 
                 int rowsWritten = 0;
 
-                //first we need to open up our output file
-                string filenameOut = Path.Combine(homer.GetOutputFolder(), "subsample" + sampleNumber.ToString(filenamePadding) + ".csv");
+                //first we need to open up our output filename
+                string filenameOut;
+                if (String.IsNullOrEmpty(homer.randSeedString))
+                {
+                    filenameOut = Path.Combine(homer.GetOutputFolder(), "subsample" + (sampleNumber + 1).ToString(filenamePadding) + ".csv");
+                }
+                else
+                {
+                    filenameOut = Path.Combine(homer.GetOutputFolder(), homer.randSeedString + "_subsample" + (sampleNumber + 1).ToString(filenamePadding) + ".csv");
+                }
+
+
 
                 using (FileStream fileStreamOut = new FileStream(filenameOut, FileMode.Create, FileAccess.Write, FileShare.None))
                 using (StreamWriter streamWriter = new StreamWriter(fileStreamOut, homer.GetEncoding()))
@@ -352,8 +366,8 @@ namespace royalsampler
 
         private void backgroundWorker_SubSampleProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
         {
-            MainProgressBar.Value = e.ProgressPercentage;
-            StatusLabel.Text = "Writing subsamples... " + e.ProgressPercentage.ToString() + "% complete...";
+            //MainProgressBar.Value = e.ProgressPercentage;
+            StatusLabel.Text = "Writing subsamples... " + ((double)(e.ProgressPercentage / (double)100)).ToString(".00") + "% complete...";
         }
 
         private void backgroundWorker_SubSampleRunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
@@ -366,6 +380,8 @@ namespace royalsampler
             StartButton.Enabled = true;
             //messagebox that it's done
             StatusLabel.Text = "Finished!";
+
+            MessageBox.Show("Your file has successfully subsampled. Hooray!" + " rows.", "Woohoo!", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
         }
 

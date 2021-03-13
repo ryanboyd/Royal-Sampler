@@ -41,6 +41,9 @@
             this.QuoteTextBox = new System.Windows.Forms.TextBox();
             this.DelimiterTextBox = new System.Windows.Forms.TextBox();
             this.SubsamplingGroupBox = new System.Windows.Forms.GroupBox();
+            this.StartButton = new System.Windows.Forms.Button();
+            this.labelRandSeed = new System.Windows.Forms.Label();
+            this.RandomSeedTextBox = new System.Windows.Forms.TextBox();
             this.labelRowsPerSample = new System.Windows.Forms.Label();
             this.RowsPerSampleTextbox = new System.Windows.Forms.TextBox();
             this.labelNumSubsamples = new System.Windows.Forms.Label();
@@ -48,9 +51,6 @@
             this.NumSubsamplesTextbox = new System.Windows.Forms.TextBox();
             this.MainProgressBar = new System.Windows.Forms.ProgressBar();
             this.StatusLabel = new System.Windows.Forms.Label();
-            this.StartButton = new System.Windows.Forms.Button();
-            this.labelRandSeed = new System.Windows.Forms.Label();
-            this.RandomSeedTextBox = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.SubsamplingGroupBox.SuspendLayout();
             this.SuspendLayout();
@@ -179,9 +179,38 @@
             this.SubsamplingGroupBox.Location = new System.Drawing.Point(333, 12);
             this.SubsamplingGroupBox.Name = "SubsamplingGroupBox";
             this.SubsamplingGroupBox.Size = new System.Drawing.Size(298, 380);
-            this.SubsamplingGroupBox.TabIndex = 8;
+            this.SubsamplingGroupBox.TabIndex = 0;
             this.SubsamplingGroupBox.TabStop = false;
             this.SubsamplingGroupBox.Text = "Subsampling Settings";
+            // 
+            // StartButton
+            // 
+            this.StartButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.StartButton.Font = new System.Drawing.Font("MS Reference Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.StartButton.Location = new System.Drawing.Point(59, 316);
+            this.StartButton.Name = "StartButton";
+            this.StartButton.Size = new System.Drawing.Size(180, 44);
+            this.StartButton.TabIndex = 104;
+            this.StartButton.Text = "Begin Subsampling!";
+            this.StartButton.UseVisualStyleBackColor = false;
+            this.StartButton.Click += new System.EventHandler(this.StartButton_Click);
+            // 
+            // labelRandSeed
+            // 
+            this.labelRandSeed.AutoSize = true;
+            this.labelRandSeed.Location = new System.Drawing.Point(15, 244);
+            this.labelRandSeed.Name = "labelRandSeed";
+            this.labelRandSeed.Size = new System.Drawing.Size(169, 19);
+            this.labelRandSeed.TabIndex = 103;
+            this.labelRandSeed.Text = "Randomization Seed:";
+            // 
+            // RandomSeedTextBox
+            // 
+            this.RandomSeedTextBox.Location = new System.Drawing.Point(15, 266);
+            this.RandomSeedTextBox.Name = "RandomSeedTextBox";
+            this.RandomSeedTextBox.Size = new System.Drawing.Size(265, 26);
+            this.RandomSeedTextBox.TabIndex = 103;
+            this.RandomSeedTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // labelRowsPerSample
             // 
@@ -248,35 +277,6 @@
             this.StatusLabel.Text = "Waiting...";
             this.StatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // StartButton
-            // 
-            this.StartButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            this.StartButton.Font = new System.Drawing.Font("MS Reference Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.StartButton.Location = new System.Drawing.Point(59, 316);
-            this.StartButton.Name = "StartButton";
-            this.StartButton.Size = new System.Drawing.Size(180, 44);
-            this.StartButton.TabIndex = 7;
-            this.StartButton.Text = "Begin Subsampling!";
-            this.StartButton.UseVisualStyleBackColor = false;
-            this.StartButton.Click += new System.EventHandler(this.StartButton_Click);
-            // 
-            // labelRandSeed
-            // 
-            this.labelRandSeed.AutoSize = true;
-            this.labelRandSeed.Location = new System.Drawing.Point(15, 244);
-            this.labelRandSeed.Name = "labelRandSeed";
-            this.labelRandSeed.Size = new System.Drawing.Size(169, 19);
-            this.labelRandSeed.TabIndex = 103;
-            this.labelRandSeed.Text = "Randomization Seed:";
-            // 
-            // RandomSeedTextBox
-            // 
-            this.RandomSeedTextBox.Location = new System.Drawing.Point(15, 266);
-            this.RandomSeedTextBox.Name = "RandomSeedTextBox";
-            this.RandomSeedTextBox.Size = new System.Drawing.Size(265, 26);
-            this.RandomSeedTextBox.TabIndex = 104;
-            this.RandomSeedTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            // 
             // RoyalSamplerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -288,6 +288,7 @@
             this.Controls.Add(this.groupBox1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "RoyalSamplerForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Royal Sampler";
             this.Load += new System.EventHandler(this.RoyalSamplerForm_Load);
             this.groupBox1.ResumeLayout(false);
