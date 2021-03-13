@@ -42,6 +42,15 @@ namespace royalsampler
             FileDetails fdet = (FileDetails)e.Result;
 
             hoju.SetRowCount(fdet.totalNumberOfRows, fdet.rowErrorCount);
+            hoju.SetColNames(fdet.colNames);
+
+            foreach (string colName in hoju.GetColNames())
+            {
+                ColumnsToRetainCheckedListBox.Items.Add(colName);
+                ColumnsToRetainCheckedListBox.SetItemChecked( ColumnsToRetainCheckedListBox.Items.IndexOf(colName), true);
+            }
+
+
             EnableControls();
             StartButton.Enabled = true;
             DisableProgBar();
@@ -64,7 +73,7 @@ namespace royalsampler
             string filenamePadding = "D" + homer.numberOfSamples.ToString().Length.ToString();
             string quoteString = homer.GetQuote().ToString();
             string escapedQuoteString = homer.GetQuote().ToString() + homer.GetQuote().ToString();
-
+            int numCols = homer.retainedIndices.Count;
 
             for (int sampleNumber = 0; sampleNumber < homer.numberOfSamples; sampleNumber++)
             {
@@ -138,10 +147,9 @@ namespace royalsampler
                             var csvDat = CsvParser.ParseHeadAndTail(streamReader, homer.GetDelim(), homer.GetQuote());
 
                             headerRow = csvDat.Item1.ToArray<string>();
-                            string[] rowToWrite = new string[headerRow.Length];
 
                             //write the header row
-                            streamWriter.Write(RowCleaner.CleanRow(headerRow, homer.GetDelim(), quoteString, escapedQuoteString));
+                            streamWriter.Write(RowCleaner.CleanRow(headerRow, homer.GetDelim(), quoteString, escapedQuoteString, numCols, hoju.retainedIndices));
                             streamWriter.Write(Environment.NewLine);
 
 
@@ -153,7 +161,7 @@ namespace royalsampler
                                 if (cardsToDraw.ContainsKey(rowNumber))
                                 {
 
-                                    string rowToWriteString = RowCleaner.CleanRow(line.ToArray<string>(), homer.GetDelim(), quoteString, escapedQuoteString) + Environment.NewLine;
+                                    string rowToWriteString = RowCleaner.CleanRow(line.ToArray<string>(), homer.GetDelim(), quoteString, escapedQuoteString, numCols, hoju.retainedIndices) + Environment.NewLine;
                                     for (int numDraws = 0; numDraws < cardsToDraw[rowNumber]; numDraws++) streamWriter.Write(rowToWriteString);
 
                                     rowsWritten += cardsToDraw[rowNumber];
@@ -180,7 +188,7 @@ namespace royalsampler
                                 if (cardsToDraw.ContainsKey(rowNumber))
                                 {
 
-                                    string rowToWriteString = RowCleaner.CleanRow(line.ToArray<string>(), homer.GetDelim(), quoteString, escapedQuoteString) + Environment.NewLine;
+                                    string rowToWriteString = RowCleaner.CleanRow(line.ToArray<string>(), homer.GetDelim(), quoteString, escapedQuoteString, numCols, hoju.retainedIndices) + Environment.NewLine;
                                     for (int numDraws = 0; numDraws < cardsToDraw[rowNumber]; numDraws++) streamWriter.Write(rowToWriteString);
 
                                     rowsWritten += cardsToDraw[rowNumber];
@@ -213,6 +221,7 @@ namespace royalsampler
             string filenamePadding = "D" + homer.numberOfSamples.ToString().Length.ToString();
             string quoteString = homer.GetQuote().ToString();
             string escapedQuoteString = homer.GetQuote().ToString() + homer.GetQuote().ToString();
+            int numCols = homer.retainedIndices.Count;
 
 
             int actualSamplesToBeWritten;
@@ -294,10 +303,9 @@ namespace royalsampler
                             var csvDat = CsvParser.ParseHeadAndTail(streamReader, homer.GetDelim(), homer.GetQuote());
 
                             headerRow = csvDat.Item1.ToArray<string>();
-                            string[] rowToWrite = new string[headerRow.Length];
 
                             //write the header row
-                            streamWriter.Write(RowCleaner.CleanRow(headerRow, homer.GetDelim(), quoteString, escapedQuoteString));
+                            streamWriter.Write(RowCleaner.CleanRow(headerRow, homer.GetDelim(), quoteString, escapedQuoteString, numCols, hoju.retainedIndices));
                             streamWriter.Write(Environment.NewLine);
 
 
@@ -308,7 +316,7 @@ namespace royalsampler
                                 rowNumber++;
                                 if (cardsToDraw.Contains(rowNumber))
                                 {
-                                    string rowToWriteString = RowCleaner.CleanRow(line.ToArray<string>(), homer.GetDelim(), quoteString, escapedQuoteString) + Environment.NewLine;
+                                    string rowToWriteString = RowCleaner.CleanRow(line.ToArray<string>(), homer.GetDelim(), quoteString, escapedQuoteString, numCols, hoju.retainedIndices) + Environment.NewLine;
                                     streamWriter.Write(rowToWriteString);
 
                                     rowsWritten++;
@@ -334,7 +342,7 @@ namespace royalsampler
                                 if (cardsToDraw.Contains(rowNumber))
                                 {
 
-                                    string rowToWriteString = RowCleaner.CleanRow(line.ToArray<string>(), homer.GetDelim(), quoteString, escapedQuoteString) + Environment.NewLine;
+                                    string rowToWriteString = RowCleaner.CleanRow(line.ToArray<string>(), homer.GetDelim(), quoteString, escapedQuoteString, numCols, hoju.retainedIndices) + Environment.NewLine;
                                     streamWriter.Write(rowToWriteString);
 
                                     rowsWritten++;
@@ -432,22 +440,32 @@ namespace royalsampler
 
     public static class RowCleaner
     {
-        public static string CleanRow(string[] rowIn, char delim, string quote, string escQuote)
+        public static string CleanRow(string[] rowIn, char delim, string quote, string escQuote, int numCols, HashSet<int> retainedIndices)
         {
 
         
-            string[] rowOut = new string[rowIn.Length];
-
-
-            for (int i = 0; i < rowIn.Length; i++)
+            string[] rowToWrite = new string[numCols];
+            
+            int outputRowIndexCounter = 0;
+            for (int index = 0; index < rowIn.Length; index++)
             {
-                rowOut[i] = rowIn[i];
-                if (rowOut[i].Contains(quote)) rowOut[i] = rowOut[i].Replace(quote, escQuote);
-                if (rowOut[i].Contains(delim)) rowOut[i] = quote + rowOut[i] + quote;
+                if (retainedIndices.Contains(index))
+                {
+                    rowToWrite[outputRowIndexCounter] = rowIn[index];
+                    outputRowIndexCounter++;
+                }
             }
 
 
-            string cleanedRow = String.Join(delim, rowOut);
+            for (int i = 0; i < numCols; i++)
+            {
+                rowToWrite[i] = rowIn[i];
+                if (rowToWrite[i].Contains(quote)) rowToWrite[i] = rowToWrite[i].Replace(quote, escQuote);
+                if (rowToWrite[i].Contains(delim)) rowToWrite[i] = quote + rowToWrite[i] + quote;
+            }
+
+
+            string cleanedRow = String.Join(delim, rowToWrite);
 
             return cleanedRow;
         }

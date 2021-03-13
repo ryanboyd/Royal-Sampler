@@ -23,6 +23,7 @@ namespace royalsampler
         public int rowsPerSample { get; set; }
         public bool allowReplacement { get; set; }
         public string randSeedString { get; set; }
+        public HashSet<int> retainedIndices { get; set; }
 
 
         /// <summary>
@@ -50,6 +51,9 @@ namespace royalsampler
                 if (fileDetails.containsHeader)
                 {
                     var csvDat = CsvParser.ParseHeadAndTail(reader, fileDetails.delimiter, fileDetails.quote);
+
+                    fileDetails.colNames = csvDat.Item1.ToList<string>();
+
                     try
                     {
                         foreach (var line in csvDat.Item2) { this.fileDetails.totalNumberOfRows++; } 
@@ -61,15 +65,30 @@ namespace royalsampler
                 }
                 else
                 {
+
+                    int numCols = 0;
+
                     var csvDat = CsvParser.Parse(reader, fileDetails.delimiter, fileDetails.quote);
                     try
                     {
-                        foreach (var line in csvDat) { this.fileDetails.totalNumberOfRows++; }
+                        foreach (var line in csvDat) 
+                        { 
+                            this.fileDetails.totalNumberOfRows++;
+                            int numColsOnLine = line.Count;
+
+                            if (numColsOnLine > numCols) numCols = numColsOnLine;
+                        }
                     }
                     catch
                     {
                         MessageBox.Show("There was an error parsing your CSV file.", "D'oh!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
+
+                    List<string> colNames = new List<string>();
+                    for (int colNum = 0; colNum < numCols; colNum++) colNames.Add("V" + colNum.ToString());
+
+                    this.fileDetails.colNames = colNames;
+
                 }
             }
 
@@ -128,6 +147,16 @@ namespace royalsampler
             return this.fileDetails.quote;
         }
 
+        public void SetColNames(List<string> colNames)
+        {
+            this.fileDetails.colNames = colNames;
+        }
+
+        public List<string> GetColNames()
+        {
+            return this.fileDetails.colNames;
+        }
+
 
     }
 
@@ -140,13 +169,8 @@ namespace royalsampler
         internal int rowErrorCount { get; set; }
         internal char delimiter { get; set; }
         internal char quote { get; set; }
-
+        internal List<string> colNames { get; set; }
         internal Encoding fileEncoding { get; set; }
-        /// <summary>
-        /// This can be referred to in order to figure out which rows have already been sampled. Only useful for if we're not allowing replacement.
-        /// </summary>
-        /// 
-        
         internal bool containsHeader { get; set; }
         
 

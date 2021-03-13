@@ -73,6 +73,7 @@ namespace royalsampler
         {
 
             InputFileTextbox.Text = "";
+            ColumnsToRetainCheckedListBox.Items.Clear();
 
             if (DelimiterTextBox.TextLength < 1 || QuoteTextBox.TextLength < 1)
             {
@@ -145,6 +146,7 @@ namespace royalsampler
             NumSubsamplesTextbox.Enabled = false;
             RowsPerSampleTextbox.Enabled = false;
             RandomSeedTextBox.Enabled = false;
+            ColumnsToRetainCheckedListBox.Enabled = false;
 
             AllowReplacementsCheckbox.Enabled = false;
             
@@ -160,6 +162,7 @@ namespace royalsampler
             NumSubsamplesTextbox.Enabled = true;
             RowsPerSampleTextbox.Enabled = true;
             RandomSeedTextBox.Enabled = true;
+            ColumnsToRetainCheckedListBox.Enabled = true;
 
             AllowReplacementsCheckbox.Enabled = true;
         }
@@ -284,6 +287,9 @@ namespace royalsampler
                     hoju.rowsPerSample = int.Parse(RowsPerSampleTextbox.Text);
                     hoju.allowReplacement = AllowReplacementsCheckbox.Checked;
                     hoju.randSeedString = RandomSeedTextBox.Text;
+                    hoju.retainedIndices = new HashSet<int>();
+
+                    foreach (int index in ColumnsToRetainCheckedListBox.CheckedIndices) hoju.retainedIndices.Add(index);
 
                     DisableControls();
                     ChangeStartToCancelButton();

@@ -51,6 +51,8 @@
             this.NumSubsamplesTextbox = new System.Windows.Forms.TextBox();
             this.MainProgressBar = new System.Windows.Forms.ProgressBar();
             this.StatusLabel = new System.Windows.Forms.Label();
+            this.ColumnsToRetainCheckedListBox = new System.Windows.Forms.CheckedListBox();
+            this.retainColsLabel = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.SubsamplingGroupBox.SuspendLayout();
             this.SuspendLayout();
@@ -263,7 +265,7 @@
             this.MainProgressBar.Location = new System.Drawing.Point(12, 429);
             this.MainProgressBar.Name = "MainProgressBar";
             this.MainProgressBar.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.MainProgressBar.Size = new System.Drawing.Size(619, 33);
+            this.MainProgressBar.Size = new System.Drawing.Size(954, 33);
             this.MainProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
             this.MainProgressBar.TabIndex = 0;
             // 
@@ -272,20 +274,44 @@
             this.StatusLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.StatusLabel.Location = new System.Drawing.Point(12, 404);
             this.StatusLabel.Name = "StatusLabel";
-            this.StatusLabel.Size = new System.Drawing.Size(619, 22);
+            this.StatusLabel.Size = new System.Drawing.Size(954, 22);
             this.StatusLabel.TabIndex = 0;
             this.StatusLabel.Text = "Waiting...";
             this.StatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // columnNameCheckBoxes
+            // 
+            this.ColumnsToRetainCheckedListBox.CheckOnClick = true;
+            this.ColumnsToRetainCheckedListBox.Font = new System.Drawing.Font("MS Reference Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.ColumnsToRetainCheckedListBox.FormattingEnabled = true;
+            this.ColumnsToRetainCheckedListBox.Location = new System.Drawing.Point(652, 34);
+            this.ColumnsToRetainCheckedListBox.Name = "columnNameCheckBoxes";
+            this.ColumnsToRetainCheckedListBox.ScrollAlwaysVisible = true;
+            this.ColumnsToRetainCheckedListBox.Size = new System.Drawing.Size(302, 344);
+            this.ColumnsToRetainCheckedListBox.TabIndex = 200;
+            // 
+            // retainColsLabel
+            // 
+            this.retainColsLabel.AutoSize = true;
+            this.retainColsLabel.Font = new System.Drawing.Font("MS Reference Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.retainColsLabel.Location = new System.Drawing.Point(652, 12);
+            this.retainColsLabel.Name = "retainColsLabel";
+            this.retainColsLabel.Size = new System.Drawing.Size(153, 19);
+            this.retainColsLabel.TabIndex = 105;
+            this.retainColsLabel.Text = "Columns to Retain:";
             // 
             // RoyalSamplerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(640, 474);
+            this.ClientSize = new System.Drawing.Size(978, 474);
+            this.Controls.Add(this.retainColsLabel);
+            this.Controls.Add(this.ColumnsToRetainCheckedListBox);
             this.Controls.Add(this.StatusLabel);
             this.Controls.Add(this.MainProgressBar);
             this.Controls.Add(this.SubsamplingGroupBox);
             this.Controls.Add(this.groupBox1);
+            this.DoubleBuffered = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "RoyalSamplerForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -296,6 +322,7 @@
             this.SubsamplingGroupBox.ResumeLayout(false);
             this.SubsamplingGroupBox.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -323,6 +350,8 @@
         private System.Windows.Forms.Button StartButton;
         private System.Windows.Forms.Label labelRandSeed;
         private System.Windows.Forms.TextBox RandomSeedTextBox;
+        private System.Windows.Forms.CheckedListBox ColumnsToRetainCheckedListBox;
+        private System.Windows.Forms.Label retainColsLabel;
     }
 }
 
