@@ -147,11 +147,11 @@ namespace royalsampler
                             var csvDat = CsvParser.ParseHeadAndTail(streamReader, homer.GetDelim(), homer.GetQuote());
 
                             headerRow = csvDat.Item1.ToArray<string>();
+                            string rowToWriteString = RowCleaner.CleanRow(headerRow, homer.GetDelim(), quoteString, escapedQuoteString, numCols, hoju.retainedIndices);
 
                             //write the header row
-                            streamWriter.Write(RowCleaner.CleanRow(headerRow, homer.GetDelim(), quoteString, escapedQuoteString, numCols, hoju.retainedIndices));
-                            streamWriter.Write(Environment.NewLine);
-
+                            streamWriter.Write(rowToWriteString);
+                            
 
                             int rowNumber = 0;
 
@@ -161,7 +161,7 @@ namespace royalsampler
                                 if (cardsToDraw.ContainsKey(rowNumber))
                                 {
 
-                                    string rowToWriteString = RowCleaner.CleanRow(line.ToArray<string>(), homer.GetDelim(), quoteString, escapedQuoteString, numCols, hoju.retainedIndices) + Environment.NewLine;
+                                    rowToWriteString = RowCleaner.CleanRow(line.ToArray<string>(), homer.GetDelim(), quoteString, escapedQuoteString, numCols, hoju.retainedIndices);
                                     for (int numDraws = 0; numDraws < cardsToDraw[rowNumber]; numDraws++) streamWriter.Write(rowToWriteString);
 
                                     rowsWritten += cardsToDraw[rowNumber];
@@ -188,7 +188,7 @@ namespace royalsampler
                                 if (cardsToDraw.ContainsKey(rowNumber))
                                 {
 
-                                    string rowToWriteString = RowCleaner.CleanRow(line.ToArray<string>(), homer.GetDelim(), quoteString, escapedQuoteString, numCols, hoju.retainedIndices) + Environment.NewLine;
+                                    string rowToWriteString = RowCleaner.CleanRow(line.ToArray<string>(), homer.GetDelim(), quoteString, escapedQuoteString, numCols, hoju.retainedIndices);
                                     for (int numDraws = 0; numDraws < cardsToDraw[rowNumber]; numDraws++) streamWriter.Write(rowToWriteString);
 
                                     rowsWritten += cardsToDraw[rowNumber];
@@ -306,17 +306,16 @@ namespace royalsampler
 
                             //write the header row
                             streamWriter.Write(RowCleaner.CleanRow(headerRow, homer.GetDelim(), quoteString, escapedQuoteString, numCols, hoju.retainedIndices));
-                            streamWriter.Write(Environment.NewLine);
-
 
                             int rowNumber = 0;
+                            string rowToWriteString;
 
                             foreach (var line in csvDat.Item2)
                             {
                                 rowNumber++;
                                 if (cardsToDraw.Contains(rowNumber))
                                 {
-                                    string rowToWriteString = RowCleaner.CleanRow(line.ToArray<string>(), homer.GetDelim(), quoteString, escapedQuoteString, numCols, hoju.retainedIndices) + Environment.NewLine;
+                                    rowToWriteString = RowCleaner.CleanRow(line.ToArray<string>(), homer.GetDelim(), quoteString, escapedQuoteString, numCols, hoju.retainedIndices);
                                     streamWriter.Write(rowToWriteString);
 
                                     rowsWritten++;
@@ -342,7 +341,7 @@ namespace royalsampler
                                 if (cardsToDraw.Contains(rowNumber))
                                 {
 
-                                    string rowToWriteString = RowCleaner.CleanRow(line.ToArray<string>(), homer.GetDelim(), quoteString, escapedQuoteString, numCols, hoju.retainedIndices) + Environment.NewLine;
+                                    string rowToWriteString = RowCleaner.CleanRow(line.ToArray<string>(), homer.GetDelim(), quoteString, escapedQuoteString, numCols, hoju.retainedIndices);
                                     streamWriter.Write(rowToWriteString);
 
                                     rowsWritten++;
@@ -459,13 +458,12 @@ namespace royalsampler
 
             for (int i = 0; i < numCols; i++)
             {
-                rowToWrite[i] = rowIn[i];
                 if (rowToWrite[i].Contains(quote)) rowToWrite[i] = rowToWrite[i].Replace(quote, escQuote);
                 if (rowToWrite[i].Contains(delim)) rowToWrite[i] = quote + rowToWrite[i] + quote;
             }
 
 
-            string cleanedRow = String.Join(delim, rowToWrite);
+            string cleanedRow = String.Join(delim, rowToWrite) + Environment.NewLine;
 
             return cleanedRow;
         }
