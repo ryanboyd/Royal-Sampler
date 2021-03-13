@@ -56,6 +56,9 @@ namespace royalsampler
         {
             Homer homer = (Homer)e.Argument;
             Random random = new Random();
+
+            if (!String.IsNullOrEmpty(homer.randSeedString)) random = new Random(int.Parse(homer.randSeedString));
+
             string filenamePadding = "D" + homer.numberOfSamples.ToString().Length.ToString();
             string quoteString = homer.GetQuote().ToString();
             string escapedQuoteString = homer.GetQuote().ToString() + homer.GetQuote().ToString();
@@ -200,6 +203,9 @@ namespace royalsampler
         {
             Homer homer = (Homer)e.Argument;
             Random random = new Random();
+
+            if (!String.IsNullOrEmpty(homer.randSeedString)) random = new Random(int.Parse(homer.randSeedString));
+
             string filenamePadding = "D" + homer.numberOfSamples.ToString().Length.ToString();
             string quoteString = homer.GetQuote().ToString();
             string escapedQuoteString = homer.GetQuote().ToString() + homer.GetQuote().ToString();
@@ -405,32 +411,6 @@ namespace royalsampler
 
 
 
-    }
-
-
-    public static class RandGenerator
-    {
-
-        public static ulong GenRandUlong(ulong min, ulong max)
-        {
-            Random random = new Random();
-            //Working with ulong so that modulo works correctly with values > long.MaxValue
-            ulong uRange = (ulong)(max - min);
-
-            //Prevent a modolo bias; see https://stackoverflow.com/a/10984975/238419
-            //for more information.
-            //In the worst case, the expected number of calls is 2 (though usually it's
-            //much closer to 1) so this loop doesn't really hurt performance at all.
-            ulong ulongRand;
-            do
-            {
-                byte[] buf = new byte[8];
-                random.NextBytes(buf);
-                ulongRand = (ulong)BitConverter.ToInt64(buf, 0);
-            } while (ulongRand > ulong.MaxValue - ((ulong.MaxValue % uRange) + 1) % uRange);
-
-            return (ulong)(ulongRand % uRange) + min;
-        }
     }
 
 

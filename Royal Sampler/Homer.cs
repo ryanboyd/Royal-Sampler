@@ -22,6 +22,7 @@ namespace royalsampler
         public int numberOfSamples { get; set; }
         public int rowsPerSample { get; set; }
         public bool allowReplacement { get; set; }
+        public string randSeedString { get; set; }
 
 
         /// <summary>

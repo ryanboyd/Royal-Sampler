@@ -216,6 +216,11 @@ namespace royalsampler
                 int numSamples = 0;
                 int numRowsPerSample = 0;
 
+                NumSubsamplesTextbox.Text = NumSubsamplesTextbox.Text.Trim();
+                RowsPerSampleTextbox.Text = RowsPerSampleTextbox.Text.Trim();
+                RandomSeedTextBox.Text = RandomSeedTextBox.Text.Trim();
+
+
                 if (!int.TryParse(NumSubsamplesTextbox.Text, out numSamples) || numSamples < 1) 
                 {
                     MessageBox.Show("Your \"Number of Subsamples\" must be a positive integer.", "D'oh!", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -225,6 +230,12 @@ namespace royalsampler
                 if (!int.TryParse(RowsPerSampleTextbox.Text, out numRowsPerSample) || numRowsPerSample < 1)
                 {
                     MessageBox.Show("Your \"Number of Rows per Sample\" must be a positive integer.", "D'oh!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                if (!int.TryParse(RandomSeedTextBox.Text, out numRowsPerSample) || !String.IsNullOrEmpty(RandomSeedTextBox.Text))
+                {
+                    MessageBox.Show("Your random seed must be an integer. If you do not want to use a randomization seed, you can leave the \"Random Seed\" box blank.", "D'oh!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
@@ -261,6 +272,7 @@ namespace royalsampler
                     hoju.numberOfSamples = int.Parse(NumSubsamplesTextbox.Text);
                     hoju.rowsPerSample = int.Parse(RowsPerSampleTextbox.Text);
                     hoju.allowReplacement = AllowReplacementsCheckbox.Checked;
+                    hoju.randSeedString = RandomSeedTextBox.Text;
 
                     DisableControls();
                     ChangeStartToCancelButton();
