@@ -7,6 +7,19 @@
     <UseWindowsForms>true</UseWindowsForms>
     <StartupObject>royalsampler.Program</StartupObject>
     <ApplicationIcon>king.ico</ApplicationIcon>
+    <SignAssembly>false</SignAssembly>
+    <DelaySign>false</DelaySign>
+    <AssemblyOriginatorKeyFile>SectigoSignCert.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyName>RoyalSampler</AssemblyName>
   </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+    <DocumentationFile></DocumentationFile>
+  </PropertyGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="if $(ConfigurationName) == Release call &quot;$(ProjectDir)signBin.bat&quot;" />
+  </Target>
 
 </Project>
