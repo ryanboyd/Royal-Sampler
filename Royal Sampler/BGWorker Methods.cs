@@ -459,7 +459,7 @@ namespace royalsampler
             for (int i = 0; i < numCols; i++)
             {
                 if (rowToWrite[i].Contains(quote)) rowToWrite[i] = rowToWrite[i].Replace(quote, escQuote);
-                if (rowToWrite[i].Contains(delim)) rowToWrite[i] = quote + rowToWrite[i] + quote;
+                if (rowToWrite[i].Contains(delim) || rowToWrite[i].Contains('\r') || rowToWrite[i].Contains('\n')) rowToWrite[i] = quote + rowToWrite[i] + quote;
             }
 
 

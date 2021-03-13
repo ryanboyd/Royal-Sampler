@@ -263,6 +263,18 @@ namespace royalsampler
                     return;
                 }
 
+                if (ColumnsToRetainCheckedListBox.CheckedIndices.Count < 1)
+                {
+                    MessageBox.Show("Your must select at least one column to retain for your subsampling.", "D'oh!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                
+
+
+
+
+
+
                 FolderBrowserDialog folderBrowser = new FolderBrowserDialog();
                 folderBrowser.UseDescriptionForTitle = true;
                 folderBrowser.ShowNewFolderButton = true;
@@ -290,6 +302,9 @@ namespace royalsampler
                     hoju.retainedIndices = new HashSet<int>();
 
                     foreach (int index in ColumnsToRetainCheckedListBox.CheckedIndices) hoju.retainedIndices.Add(index);
+
+
+
 
                     DisableControls();
                     ChangeStartToCancelButton();
