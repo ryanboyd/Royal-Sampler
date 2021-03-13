@@ -19,13 +19,21 @@ namespace royalsampler
         #region Just for Counting Rows
         private void backgroundWorker_CountRows(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
-            e.Result = ((Homer)e.Argument).CountCards();
+
+            TimeSpan reportPeriod = TimeSpan.FromMinutes(0.01);
+            using (new System.Threading.Timer(
+                           _ => (sender as BackgroundWorker).ReportProgress(((Homer)e.Argument).GetCardCount()), null, reportPeriod, reportPeriod))
+            {
+                e.Result = ((Homer)e.Argument).CountCards();
+            }
+
+            
             return;
         }
 
         private void backgroundWorker_CountRowsProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
         {
-            //progressBar1.Value = e.ProgressPercentage;
+            StatusLabel.Text = "Counting rows... " + ToKMB(e.ProgressPercentage) + " thus far...";
         }
 
         private void backgroundWorker_CountRowsRunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)

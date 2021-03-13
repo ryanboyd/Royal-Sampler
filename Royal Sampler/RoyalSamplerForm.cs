@@ -21,7 +21,7 @@ namespace royalsampler
 
         Homer hoju;
         BackgroundWorker theDealer;
-        //Timer timer;
+        
 
 
         private void RoyalSamplerForm_Load(object sender, EventArgs e)
@@ -111,7 +111,7 @@ namespace royalsampler
                              delimchar: DelimiterTextBox.Text[0]);
 
             BackgroundWorker cardCounter = new BackgroundWorker();
-            cardCounter.WorkerReportsProgress = false;
+            cardCounter.WorkerReportsProgress = true;
             cardCounter.DoWork += new DoWorkEventHandler(backgroundWorker_CountRows);
             cardCounter.ProgressChanged += new ProgressChangedEventHandler(backgroundWorker_CountRowsProgressChanged);
             cardCounter.RunWorkerCompleted += new RunWorkerCompletedEventHandler(backgroundWorker_CountRowsRunWorkerCompleted);
@@ -164,7 +164,7 @@ namespace royalsampler
         private void ChangeStartToCancelButton() 
         {
             StartButton.Text = "Cancel";
-            StartButton.BackColor = Color.Coral;
+            StartButton.BackColor = Color.Salmon;
         }
 
         private void ChangeCancelToStartButton()
@@ -263,6 +263,7 @@ namespace royalsampler
                     hoju.allowReplacement = AllowReplacementsCheckbox.Checked;
 
                     DisableControls();
+                    ChangeStartToCancelButton();
 
                     theDealer = new BackgroundWorker();
                 
@@ -278,6 +279,7 @@ namespace royalsampler
                     theDealer.ProgressChanged += new ProgressChangedEventHandler(backgroundWorker_SubSampleProgressChanged);
                     theDealer.RunWorkerCompleted += new RunWorkerCompletedEventHandler(backgroundWorker_SubSampleRunWorkerCompleted);
                     theDealer.WorkerReportsProgress = true;
+                    theDealer.WorkerSupportsCancellation = true;
 
                     StatusLabel.Text = "Preparing to subsample...";
                     theDealer.RunWorkerAsync(hoju);
