@@ -49,6 +49,8 @@
             this.MainProgressBar = new System.Windows.Forms.ProgressBar();
             this.StatusLabel = new System.Windows.Forms.Label();
             this.StartButton = new System.Windows.Forms.Button();
+            this.labelRandSeed = new System.Windows.Forms.Label();
+            this.RandomSeedTextBox = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.SubsamplingGroupBox.SuspendLayout();
             this.SuspendLayout();
@@ -88,9 +90,9 @@
             this.labelCurrentFile.AutoSize = true;
             this.labelCurrentFile.Location = new System.Drawing.Point(15, 244);
             this.labelCurrentFile.Name = "labelCurrentFile";
-            this.labelCurrentFile.Size = new System.Drawing.Size(76, 19);
+            this.labelCurrentFile.Size = new System.Drawing.Size(83, 19);
             this.labelCurrentFile.TabIndex = 0;
-            this.labelCurrentFile.Text = "Input File";
+            this.labelCurrentFile.Text = "Input File:";
             // 
             // OpenFileButton
             // 
@@ -124,18 +126,18 @@
             this.labelQuote.AutoSize = true;
             this.labelQuote.Location = new System.Drawing.Point(156, 38);
             this.labelQuote.Name = "labelQuote";
-            this.labelQuote.Size = new System.Drawing.Size(55, 19);
+            this.labelQuote.Size = new System.Drawing.Size(62, 19);
             this.labelQuote.TabIndex = 0;
-            this.labelQuote.Text = "Quote";
+            this.labelQuote.Text = "Quote:";
             // 
             // labelDelimiter
             // 
             this.labelDelimiter.AutoSize = true;
             this.labelDelimiter.Location = new System.Drawing.Point(15, 38);
             this.labelDelimiter.Name = "labelDelimiter";
-            this.labelDelimiter.Size = new System.Drawing.Size(74, 19);
+            this.labelDelimiter.Size = new System.Drawing.Size(81, 19);
             this.labelDelimiter.TabIndex = 0;
-            this.labelDelimiter.Text = "Delimiter";
+            this.labelDelimiter.Text = "Delimiter:";
             // 
             // InputFileTextbox
             // 
@@ -165,6 +167,9 @@
             // 
             // SubsamplingGroupBox
             // 
+            this.SubsamplingGroupBox.Controls.Add(this.StartButton);
+            this.SubsamplingGroupBox.Controls.Add(this.labelRandSeed);
+            this.SubsamplingGroupBox.Controls.Add(this.RandomSeedTextBox);
             this.SubsamplingGroupBox.Controls.Add(this.labelRowsPerSample);
             this.SubsamplingGroupBox.Controls.Add(this.RowsPerSampleTextbox);
             this.SubsamplingGroupBox.Controls.Add(this.labelNumSubsamples);
@@ -173,7 +178,7 @@
             this.SubsamplingGroupBox.Font = new System.Drawing.Font("MS Reference Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.SubsamplingGroupBox.Location = new System.Drawing.Point(333, 12);
             this.SubsamplingGroupBox.Name = "SubsamplingGroupBox";
-            this.SubsamplingGroupBox.Size = new System.Drawing.Size(298, 305);
+            this.SubsamplingGroupBox.Size = new System.Drawing.Size(298, 380);
             this.SubsamplingGroupBox.TabIndex = 8;
             this.SubsamplingGroupBox.TabStop = false;
             this.SubsamplingGroupBox.Text = "Subsampling Settings";
@@ -247,7 +252,7 @@
             // 
             this.StartButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.StartButton.Font = new System.Drawing.Font("MS Reference Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.StartButton.Location = new System.Drawing.Point(392, 335);
+            this.StartButton.Location = new System.Drawing.Point(59, 316);
             this.StartButton.Name = "StartButton";
             this.StartButton.Size = new System.Drawing.Size(180, 44);
             this.StartButton.TabIndex = 7;
@@ -255,12 +260,28 @@
             this.StartButton.UseVisualStyleBackColor = false;
             this.StartButton.Click += new System.EventHandler(this.StartButton_Click);
             // 
+            // labelRandSeed
+            // 
+            this.labelRandSeed.AutoSize = true;
+            this.labelRandSeed.Location = new System.Drawing.Point(15, 244);
+            this.labelRandSeed.Name = "labelRandSeed";
+            this.labelRandSeed.Size = new System.Drawing.Size(169, 19);
+            this.labelRandSeed.TabIndex = 103;
+            this.labelRandSeed.Text = "Randomization Seed:";
+            // 
+            // RandomSeedTextBox
+            // 
+            this.RandomSeedTextBox.Location = new System.Drawing.Point(15, 266);
+            this.RandomSeedTextBox.Name = "RandomSeedTextBox";
+            this.RandomSeedTextBox.Size = new System.Drawing.Size(265, 26);
+            this.RandomSeedTextBox.TabIndex = 104;
+            this.RandomSeedTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
             // RoyalSamplerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(640, 474);
-            this.Controls.Add(this.StartButton);
             this.Controls.Add(this.StatusLabel);
             this.Controls.Add(this.MainProgressBar);
             this.Controls.Add(this.SubsamplingGroupBox);
@@ -299,6 +320,8 @@
         private System.Windows.Forms.Label labelNumSubsamples;
         private System.Windows.Forms.TextBox NumSubsamplesTextbox;
         private System.Windows.Forms.Button StartButton;
+        private System.Windows.Forms.Label labelRandSeed;
+        private System.Windows.Forms.TextBox RandomSeedTextBox;
     }
 }
 

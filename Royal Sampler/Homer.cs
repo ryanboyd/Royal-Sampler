@@ -18,7 +18,7 @@ namespace royalsampler
         /// <summary>
         /// This is an object that contains all of the file input details, including things like file encoding and delimiter characters.
         /// </summary>
-        private FileDetails deckOfCards;
+        private FileDetails fileDetails;
         public int numberOfSamples { get; set; }
         public int rowsPerSample { get; set; }
         public bool allowReplacement { get; set; }
@@ -29,29 +29,29 @@ namespace royalsampler
         /// </summary>
         public void ArrangeDeck(string fileIn, bool allowRepl, bool containsHead, Encoding fEncode, char quotechar, char delimchar)
         {
-            deckOfCards = new FileDetails(fileIn, containsHead, fEncode, quotechar, delimchar);
+            fileDetails = new FileDetails(fileIn, containsHead, fEncode, quotechar, delimchar);
         }
 
 
         /// <summary>
         /// Counts the number of rows within the CSV file.
         /// </summary>
-        public FileDetails CountCards()
+        public FileDetails CountRows()
         {
 
 
-            this.deckOfCards.totalNumberOfRows = 0;
-            this.deckOfCards.rowErrorCount = 0;
+            this.fileDetails.totalNumberOfRows = 0;
+            this.fileDetails.rowErrorCount = 0;
 
-            using (var stream = File.OpenRead(this.deckOfCards.inputFileLocation))
-            using (var reader = new StreamReader(stream, encoding: this.deckOfCards.fileEncoding))
+            using (var stream = File.OpenRead(this.fileDetails.inputFileLocation))
+            using (var reader = new StreamReader(stream, encoding: this.fileDetails.fileEncoding))
             {
-                if (deckOfCards.containsHeader)
+                if (fileDetails.containsHeader)
                 {
-                    var csvDat = CsvParser.ParseHeadAndTail(reader, deckOfCards.delimiter, deckOfCards.quote);
+                    var csvDat = CsvParser.ParseHeadAndTail(reader, fileDetails.delimiter, fileDetails.quote);
                     try
                     {
-                        foreach (var line in csvDat.Item2) { this.deckOfCards.totalNumberOfRows++; } 
+                        foreach (var line in csvDat.Item2) { this.fileDetails.totalNumberOfRows++; } 
                     }
                     catch
                     {
@@ -60,10 +60,10 @@ namespace royalsampler
                 }
                 else
                 {
-                    var csvDat = CsvParser.Parse(reader, deckOfCards.delimiter, deckOfCards.quote);
+                    var csvDat = CsvParser.Parse(reader, fileDetails.delimiter, fileDetails.quote);
                     try
                     {
-                        foreach (var line in csvDat) { this.deckOfCards.totalNumberOfRows++; }
+                        foreach (var line in csvDat) { this.fileDetails.totalNumberOfRows++; }
                     }
                     catch
                     {
@@ -72,7 +72,7 @@ namespace royalsampler
                 }
             }
 
-            return this.deckOfCards;
+            return this.fileDetails;
 
 
         }
@@ -83,48 +83,48 @@ namespace royalsampler
         /// <summary>
         /// Retrieve the already-determined number of rows.
         /// </summary>
-        public int GetCardCount()
+        public int GetRowCount()
         {
-            return this.deckOfCards.totalNumberOfRows;
+            return this.fileDetails.totalNumberOfRows;
         }
 
-        public void SetCardCount(int nrow, int nerr)
+        public void SetRowCount(int nrow, int nerr)
         {
-            this.deckOfCards.totalNumberOfRows = nrow;
-            this.deckOfCards.rowErrorCount = nerr;
+            this.fileDetails.totalNumberOfRows = nrow;
+            this.fileDetails.rowErrorCount = nerr;
         }
 
         public void SetOutputFolder(string folderOut)
         {
-            this.deckOfCards.outputFolder = folderOut;
+            this.fileDetails.outputFolder = folderOut;
         }
 
         public string GetOutputFolder()
         {
-            return this.deckOfCards.outputFolder;
+            return this.fileDetails.outputFolder;
         }
         public string GetInputFile()
         {
-            return this.deckOfCards.inputFileLocation;
+            return this.fileDetails.inputFileLocation;
         }
 
         public Encoding GetEncoding()
         {
-            return this.deckOfCards.fileEncoding;
+            return this.fileDetails.fileEncoding;
         }
 
         public bool HasHeader()
         {
-            return this.deckOfCards.containsHeader;
+            return this.fileDetails.containsHeader;
         }
         public char GetDelim()
         {
-            return this.deckOfCards.delimiter;
+            return this.fileDetails.delimiter;
         }
 
         public char GetQuote()
         {
-            return this.deckOfCards.quote;
+            return this.fileDetails.quote;
         }
 
 

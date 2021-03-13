@@ -48,7 +48,7 @@ namespace royalsampler
             QuoteTextBox.Text = "\"";
             ContainsHeaderCheckbox.Checked = true;
             RowsPerSampleTextbox.Text = "1000";
-            NumSubsamplesTextbox.Text = "1000";
+            NumSubsamplesTextbox.Text = "100000";
 
             InputFileTextbox.Enabled = false;
             MainProgressBar.Minimum = 0;

@@ -22,9 +22,9 @@ namespace royalsampler
 
             TimeSpan reportPeriod = TimeSpan.FromMinutes(0.01);
             using (new System.Threading.Timer(
-                           _ => (sender as BackgroundWorker).ReportProgress(((Homer)e.Argument).GetCardCount()), null, reportPeriod, reportPeriod))
+                           _ => (sender as BackgroundWorker).ReportProgress(((Homer)e.Argument).GetRowCount()), null, reportPeriod, reportPeriod))
             {
-                e.Result = ((Homer)e.Argument).CountCards();
+                e.Result = ((Homer)e.Argument).CountRows();
             }
 
             
@@ -41,11 +41,11 @@ namespace royalsampler
 
             FileDetails fdet = (FileDetails)e.Result;
 
-            hoju.SetCardCount(fdet.totalNumberOfRows, fdet.rowErrorCount);
+            hoju.SetRowCount(fdet.totalNumberOfRows, fdet.rowErrorCount);
             EnableControls();
             StartButton.Enabled = true;
             DisableProgBar();
-            StatusLabel.Text = "Dataset contains " + ToKMB(hoju.GetCardCount()) + " rows";
+            StatusLabel.Text = "Dataset contains " + ToKMB(hoju.GetRowCount()) + " rows";
 
         }
         #endregion
@@ -84,7 +84,7 @@ namespace royalsampler
 
                 while (cardsDrawnCount < homer.rowsPerSample)
                 {
-                    int randomDraw = random.Next(1, homer.GetCardCount());
+                    int randomDraw = random.Next(1, homer.GetRowCount());
 
                     if (cardsToDraw.ContainsKey(randomDraw))
                     {
@@ -207,9 +207,9 @@ namespace royalsampler
 
             int actualSamplesToBeWritten;
 
-            if (homer.numberOfSamples * homer.rowsPerSample > homer.GetCardCount())
+            if (homer.numberOfSamples * homer.rowsPerSample > homer.GetRowCount())
             {
-                actualSamplesToBeWritten = (int)Math.Round((homer.GetCardCount() / (double)homer.rowsPerSample) * 100, 0, MidpointRounding.AwayFromZero);
+                actualSamplesToBeWritten = (int)Math.Round((homer.GetRowCount() / (double)homer.rowsPerSample) * 100, 0, MidpointRounding.AwayFromZero);
             }
             else 
             {
@@ -220,11 +220,11 @@ namespace royalsampler
 
 
             HashSet<int> cardsToDraw;
-            int[] rowsToSample = new int[homer.GetCardCount()];
+            int[] rowsToSample = new int[homer.GetRowCount()];
 
 
             #region Randomize order of sample
-            for (int i = 0; i < homer.GetCardCount(); i++) rowsToSample[i] = i + 1;
+            for (int i = 0; i < homer.GetRowCount(); i++) rowsToSample[i] = i + 1;
             rowsToSample = rowsToSample.OrderBy(x => random.Next()).ToArray<int>();
             #endregion
 
@@ -245,7 +245,7 @@ namespace royalsampler
                 int skipToVal = (sampleNumber * homer.rowsPerSample);
                 int takeVal = homer.rowsPerSample;
 
-                if (skipToVal > homer.GetCardCount()) break;
+                if (skipToVal > homer.GetRowCount()) break;
 
                 if (skipToVal + takeVal > rowsToSample.Length) takeVal = rowsToSample.Length - skipToVal;
 
