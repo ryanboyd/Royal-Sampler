@@ -20,6 +20,7 @@ namespace royalsampler
         }
 
         Homer hoju;
+        BackgroundWorker theDealer;
         //Timer timer;
 
 
@@ -46,13 +47,20 @@ namespace royalsampler
             DelimiterTextBox.Text = ",";
             QuoteTextBox.Text = "\"";
             ContainsHeaderCheckbox.Checked = true;
+            RowsPerSampleTextbox.Text = "1000";
+            NumSubsamplesTextbox.Text = "1000";
 
             InputFileTextbox.Enabled = false;
             MainProgressBar.Minimum = 0;
             MainProgressBar.Maximum = 100;
             MainProgressBar.Value = 0;
+            MainProgressBar.Step = 1;
             MainProgressBar.Enabled = false;
+            AllowReplacementsCheckbox.Checked = true;
 
+            ChangeCancelToStartButton();
+
+            theDealer = new BackgroundWorker();
             hoju = new Homer();
 
         }
@@ -108,18 +116,15 @@ namespace royalsampler
             cardCounter.ProgressChanged += new ProgressChangedEventHandler(backgroundWorker_CountRowsProgressChanged);
             cardCounter.RunWorkerCompleted += new RunWorkerCompletedEventHandler(backgroundWorker_CountRowsRunWorkerCompleted);
 
-
             DisableControls();
-            EnableProgBarPct();
-            NumRowsLabel.Text = "Counting rows of data...";
+            StartButton.Enabled = false;
+            EnableProgBarNeverEnding();
+            StatusLabel.Text = "Counting rows of data...";
+
+            
 
             //let's get counting, but on a background thread
             cardCounter.RunWorkerAsync(hoju);
-
-            //timer = new Timer();
-            //timer.Interval = (100); // 0.5 secs
-            //timer.Tick += new EventHandler(timer_RowCountTick);
-            //timer.Start();
 
         }
 
@@ -156,17 +161,30 @@ namespace royalsampler
             
         }
 
+        private void ChangeStartToCancelButton() 
+        {
+            StartButton.Text = "Cancel";
+            StartButton.BackColor = Color.Coral;
+        }
+
+        private void ChangeCancelToStartButton()
+        {
+            StartButton.Text = "Begin Subsampling!";
+            StartButton.BackColor = Color.LightGreen;
+        }
 
 
 
 
         private void EnableProgBarNeverEnding() {
+            MainProgressBar.Enabled = true;
             MainProgressBar.Style = ProgressBarStyle.Marquee;
             MainProgressBar.MarqueeAnimationSpeed = 30;
         }
 
         private void EnableProgBarPct()
         {
+            MainProgressBar.Enabled = true;
             MainProgressBar.Style = ProgressBarStyle.Blocks;
             MainProgressBar.Minimum = 0;
             MainProgressBar.Maximum = 100;
@@ -177,91 +195,96 @@ namespace royalsampler
         {
             MainProgressBar.Style = ProgressBarStyle.Continuous;
             MainProgressBar.MarqueeAnimationSpeed = 0;
+            MainProgressBar.Enabled = false;
         }
+
+
 
         
         
         private void StartButton_Click(object sender, EventArgs e)
         {
-            int numSamples = 0;
-            int numRowsPerSample = 0;
 
-            if (!int.TryParse(NumSubsamplesTextbox.Text, out numSamples) || numSamples < 1) 
+            if (theDealer.IsBusy)
             {
-                MessageBox.Show("Your \"Number of Subsamples\" must be a positive integer.", "D'oh!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                theDealer.CancelAsync();
+                StartButton.Text = "Cancelling...";
             }
-
-            if (!int.TryParse(RowsPerSampleTextbox.Text, out numRowsPerSample) || numRowsPerSample < 1)
-            {
-                MessageBox.Show("Your \"Number of Rows per Sample\" must be a positive integer.", "D'oh!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            if (String.IsNullOrEmpty(InputFileTextbox.Text))
-            {
-                MessageBox.Show("Your must first select a file that you would like to subsample.", "D'oh!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            if (String.IsNullOrEmpty(DelimiterTextBox.Text))
-            {
-                MessageBox.Show("Your must select your delimiter character for this CSV file.", "D'oh!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            if (String.IsNullOrEmpty(QuoteTextBox.Text))
-            {
-                MessageBox.Show("Your must select your quoting character for this CSV file.", "D'oh!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-
-             
-
-
-            FolderBrowserDialog folderBrowser = new FolderBrowserDialog();
-            folderBrowser.UseDescriptionForTitle = true;
-            folderBrowser.ShowNewFolderButton = true;
-            folderBrowser.Description = "Please choose the OUTPUT location for your files";
-
-            folderBrowser.SelectedPath = Path.GetDirectoryName(InputFileTextbox.Text);
-
-
-            if (folderBrowser.ShowDialog() != DialogResult.Cancel)
+            else
             {
 
+                int numSamples = 0;
+                int numRowsPerSample = 0;
+
+                if (!int.TryParse(NumSubsamplesTextbox.Text, out numSamples) || numSamples < 1) 
+                {
+                    MessageBox.Show("Your \"Number of Subsamples\" must be a positive integer.", "D'oh!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                if (!int.TryParse(RowsPerSampleTextbox.Text, out numRowsPerSample) || numRowsPerSample < 1)
+                {
+                    MessageBox.Show("Your \"Number of Rows per Sample\" must be a positive integer.", "D'oh!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                if (String.IsNullOrEmpty(InputFileTextbox.Text))
+                {
+                    MessageBox.Show("Your must first select a file that you would like to subsample.", "D'oh!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                if (String.IsNullOrEmpty(DelimiterTextBox.Text))
+                {
+                    MessageBox.Show("Your must select your delimiter character for this CSV file.", "D'oh!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                if (String.IsNullOrEmpty(QuoteTextBox.Text))
+                {
+                    MessageBox.Show("Your must select your quoting character for this CSV file.", "D'oh!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                FolderBrowserDialog folderBrowser = new FolderBrowserDialog();
+                folderBrowser.UseDescriptionForTitle = true;
+                folderBrowser.ShowNewFolderButton = true;
+                folderBrowser.Description = "Please choose the OUTPUT location for your files";
+
+                folderBrowser.SelectedPath = Path.GetDirectoryName(InputFileTextbox.Text);
+
+                if (folderBrowser.ShowDialog() != DialogResult.Cancel)
+                {
 
 
-                hoju.SetOutputFolder(folderBrowser.SelectedPath);
-                hoju.numberOfSamples = int.Parse(NumSubsamplesTextbox.Text);
-                hoju.rowsPerSample = int.Parse(RowsPerSampleTextbox.Text);
-                hoju.allowReplacement = AllowReplacementsCheckbox.Checked;
+                    hoju.SetOutputFolder(folderBrowser.SelectedPath);
+                    hoju.numberOfSamples = int.Parse(NumSubsamplesTextbox.Text);
+                    hoju.rowsPerSample = int.Parse(RowsPerSampleTextbox.Text);
+                    hoju.allowReplacement = AllowReplacementsCheckbox.Checked;
 
-                DisableControls();
+                    DisableControls();
 
-                BackgroundWorker theDealer = new BackgroundWorker();
-                theDealer.DoWork += new DoWorkEventHandler(backgroundWorker_SubSample);
-                theDealer.ProgressChanged += new ProgressChangedEventHandler(backgroundWorker_SubSampleProgressChanged);
-                theDealer.RunWorkerCompleted += new RunWorkerCompletedEventHandler(backgroundWorker_SubSampleRunWorkerCompleted);
-                theDealer.WorkerReportsProgress = true;
+                    theDealer = new BackgroundWorker();
+                
+                    if (AllowReplacementsCheckbox.Checked)
+                    {
+                        theDealer.DoWork += new DoWorkEventHandler(backgroundWorker_SubSampleWithReplacement);
+                    }
+                    else
+                    {
+                        theDealer.DoWork += new DoWorkEventHandler(backgroundWorker_SubSampleWithoutReplacement);
+                    }
+                
+                    theDealer.ProgressChanged += new ProgressChangedEventHandler(backgroundWorker_SubSampleProgressChanged);
+                    theDealer.RunWorkerCompleted += new RunWorkerCompletedEventHandler(backgroundWorker_SubSampleRunWorkerCompleted);
+                    theDealer.WorkerReportsProgress = true;
 
+                    StatusLabel.Text = "Preparing to subsample...";
+                    theDealer.RunWorkerAsync(hoju);
 
-                theDealer.RunWorkerAsync(hoju);
-
-
+                }
 
             }
-
-
-
-
-
-
-
-
-
-
         }
 
 

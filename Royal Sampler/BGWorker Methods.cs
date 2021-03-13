@@ -15,6 +15,8 @@ namespace royalsampler
     public partial class RoyalSamplerForm : Form
     {
 
+
+        #region Just for Counting Rows
         private void backgroundWorker_CountRows(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
             e.Result = ((Homer)e.Argument).CountCards();
@@ -33,16 +35,16 @@ namespace royalsampler
 
             hoju.SetCardCount(fdet.totalNumberOfRows, fdet.rowErrorCount);
             EnableControls();
-
-            NumRowsLabel.Text = "Dataset contains " + ToKMB(hoju.GetCardCount()) + " rows";
+            StartButton.Enabled = true;
+            DisableProgBar();
+            StatusLabel.Text = "Dataset contains " + ToKMB(hoju.GetCardCount()) + " rows";
 
         }
+        #endregion
 
 
 
-
-
-        private void backgroundWorker_SubSample(object sender, System.ComponentModel.DoWorkEventArgs e)
+        private void backgroundWorker_SubSampleWithReplacement(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
             Homer homer = (Homer)e.Argument;
             Random random = new Random();
@@ -54,56 +56,48 @@ namespace royalsampler
             for (int sampleNumber = 0; sampleNumber < homer.numberOfSamples; sampleNumber++)
             {
 
+                if ((sender as BackgroundWorker).CancellationPending) break;
 
                 //report progress
-                (sender as BackgroundWorker).ReportProgress((int)Math.Round( (double)(sampleNumber / homer.numberOfSamples) * 100, 0, MidpointRounding.AwayFromZero));
+                //MessageBox.Show((((double)sampleNumber / homer.numberOfSamples) * 100).ToString());
+                int pctDone = (int)Math.Round((((double)sampleNumber / homer.numberOfSamples) * 100), 0, MidpointRounding.AwayFromZero);
+                (sender as BackgroundWorker).ReportProgress(pctDone);
 
 
-                
-
-                Dictionary<ulong, int> cardsToDraw = new Dictionary<ulong, int>();
+                Dictionary<int, int> cardsToDraw = new Dictionary<int, int>();
                 
                 #region Determine Our Samples Needed
-                if (homer.allowReplacement)
-                {
+           
                     
+                int cardsDrawnCount = 0;
 
-                    int cardsDrawnCount = 0;
+                //decimal pctSample = ((ulong)homer.rowsPerSample / homer.GetCardCount()) * 100;
+                //int drawLikelihood = (int)Math.Round(pctSample, 0, MidpointRounding.AwayFromZero);
 
-                    decimal pctSample = ((ulong)homer.rowsPerSample / homer.GetCardCount()) * 100;
-                    int drawLikelihood = (int)Math.Round(pctSample, 0, MidpointRounding.AwayFromZero);
+                while (cardsDrawnCount < homer.rowsPerSample)
+                {
+                    int randomDraw = random.Next(1, homer.GetCardCount());
 
-                    while (cardsDrawnCount < homer.rowsPerSample)
+                    if (cardsToDraw.ContainsKey(randomDraw))
                     {
-
-                        for (ulong card = 1; card <= homer.GetCardCount(); card++)
-                        {
-                            if (random.Next(0, 100) <= drawLikelihood)
-                            {
-                                if (cardsToDraw.ContainsKey(card))
-                                {
-                                    cardsToDraw[card]++;
-                                }
-                                else
-                                {
-                                    cardsToDraw.Add(card, 1);
-                                }
-
-                                cardsDrawnCount++;
-                                if (cardsDrawnCount == homer.rowsPerSample) break;
-
-                            }
-                        }
-
-
+                        cardsToDraw[randomDraw]++;
                     }
+                    else
+                    {
+                        cardsToDraw.Add(randomDraw, 1);
+                    }
+
+                    cardsDrawnCount++;
+
                 }
+
                 #endregion
 
 
 
 
                 #region Get Busy Writin' or Get Busy Dyin'
+                int rowsWritten = 0;
 
                 //first we need to open up our output file
                 string filenameOut = Path.Combine(homer.GetOutputFolder(), "subsample" + sampleNumber.ToString(filenamePadding) + ".csv");
@@ -116,11 +110,9 @@ namespace royalsampler
                     {
                         string[] headerRow;
 
-
                         using (var fileStreamIn = File.OpenRead(homer.GetInputFile()))
                         using (var streamReader = new StreamReader(fileStreamIn, encoding: homer.GetEncoding()))
                         {
-                                
 
                             var csvDat = CsvParser.ParseHeadAndTail(streamReader, homer.GetDelim(), homer.GetQuote());
 
@@ -132,7 +124,7 @@ namespace royalsampler
                             streamWriter.Write(Environment.NewLine);
 
 
-                            ulong rowNumber = 0;
+                            int rowNumber = 0;
 
                             foreach (var line in csvDat.Item2)
                             {
@@ -143,20 +135,44 @@ namespace royalsampler
                                     string rowToWriteString = RowCleaner.CleanRow(line.ToArray<string>(), homer.GetDelim(), quoteString, escapedQuoteString) + Environment.NewLine;
                                     for (int numDraws = 0; numDraws < cardsToDraw[rowNumber]; numDraws++) streamWriter.Write(rowToWriteString);
 
+                                    rowsWritten += cardsToDraw[rowNumber];
+
+                                    if (rowsWritten == homer.rowsPerSample) break;
+
                                 }
-                                
-
-                            }
-                                
-                            
+                            }   
                         }
+                    }
+                    else
+                    {
+                        using (var fileStreamIn = File.OpenRead(homer.GetInputFile()))
+                        using (var streamReader = new StreamReader(fileStreamIn, encoding: homer.GetEncoding()))
+                        {
 
+                            var csvDat = CsvParser.Parse(streamReader, homer.GetDelim(), homer.GetQuote());
 
+                            int rowNumber = 0;
 
+                            foreach (var line in csvDat)
+                            {
+                                rowNumber++;
+                                if (cardsToDraw.ContainsKey(rowNumber))
+                                {
+
+                                    string rowToWriteString = RowCleaner.CleanRow(line.ToArray<string>(), homer.GetDelim(), quoteString, escapedQuoteString) + Environment.NewLine;
+                                    for (int numDraws = 0; numDraws < cardsToDraw[rowNumber]; numDraws++) streamWriter.Write(rowToWriteString);
+
+                                    rowsWritten += cardsToDraw[rowNumber];
+
+                                    if (rowsWritten == homer.rowsPerSample) break;
+
+                                }
+                            }
+                        }
                     }
 
                 }
-                    #endregion
+                #endregion
 
 
             }
@@ -165,56 +181,177 @@ namespace royalsampler
 
 
 
-            using (var stream = File.OpenRead(homer.GetInputFile()))
-            using (var reader = new StreamReader(stream, encoding: homer.GetEncoding()))
-            {
-                if (homer.HasHeader())               {
-                    var csvDat = CsvParser.ParseHeadAndTail(reader, homer.GetDelim(), homer.GetQuote());
-                    
-                    try
-                    {
-                        foreach (var line in csvDat.Item2) {  }
-                    }
-                    catch
-                    {
-                        MessageBox.Show("There was an error parsing your CSV file.", "D'oh!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
-                else
-                {
-                    var csvDat = CsvParser.Parse(reader, homer.GetDelim(), homer.GetQuote());
-                    try
-                    {
-                        foreach (var line in csvDat) {  }
-                    }
-                    catch
-                    {
-                        MessageBox.Show("There was an error parsing your CSV file.", "D'oh!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
-            }
+          
 
 
             return;
         }
 
 
+        private void backgroundWorker_SubSampleWithoutReplacement(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
+            Homer homer = (Homer)e.Argument;
+            Random random = new Random();
+            string filenamePadding = "D" + homer.numberOfSamples.ToString().Length.ToString();
+            string quoteString = homer.GetQuote().ToString();
+            string escapedQuoteString = homer.GetQuote().ToString() + homer.GetQuote().ToString();
 
+
+            int actualSamplesToBeWritten;
+
+            if (homer.numberOfSamples * homer.rowsPerSample > homer.GetCardCount())
+            {
+                actualSamplesToBeWritten = (int)Math.Round((homer.GetCardCount() / (double)homer.rowsPerSample) * 100, 0, MidpointRounding.AwayFromZero);
+            }
+            else 
+            {
+                actualSamplesToBeWritten = homer.numberOfSamples;
+            }
+
+
+
+
+            HashSet<int> cardsToDraw;
+            int[] rowsToSample = new int[homer.GetCardCount()];
+
+
+            #region Randomize order of sample
+            for (int i = 0; i < homer.GetCardCount(); i++) rowsToSample[i] = i + 1;
+            rowsToSample = rowsToSample.OrderBy(x => random.Next()).ToArray<int>();
+            #endregion
+
+
+
+
+
+            for (int sampleNumber = 0; sampleNumber < homer.numberOfSamples; sampleNumber++)
+            {
+
+                if ((sender as BackgroundWorker).CancellationPending) break;
+
+                //report progress
+                int pctDone = (int)Math.Round((((double)sampleNumber / actualSamplesToBeWritten) * 100), 0, MidpointRounding.AwayFromZero);
+                (sender as BackgroundWorker).ReportProgress(pctDone);
+
+
+                int skipToVal = (sampleNumber * homer.rowsPerSample);
+                int takeVal = homer.rowsPerSample;
+
+                if (skipToVal > homer.GetCardCount()) break;
+
+                if (skipToVal + takeVal > rowsToSample.Length) takeVal = rowsToSample.Length - skipToVal;
+
+                int[] subsample = rowsToSample.Skip(skipToVal).Take(takeVal).ToArray();
+
+                cardsToDraw = subsample.ToHashSet<int>();
+
+
+                #region Get Busy Writin' or Get Busy Dyin'
+
+                int rowsWritten = 0;
+
+                //first we need to open up our output file
+                string filenameOut = Path.Combine(homer.GetOutputFolder(), "subsample" + sampleNumber.ToString(filenamePadding) + ".csv");
+
+                using (FileStream fileStreamOut = new FileStream(filenameOut, FileMode.Create, FileAccess.Write, FileShare.None))
+                using (StreamWriter streamWriter = new StreamWriter(fileStreamOut, homer.GetEncoding()))
+                {
+                    if (homer.HasHeader())
+                    {
+                        string[] headerRow;
+
+                        using (var fileStreamIn = File.OpenRead(homer.GetInputFile()))
+                        using (var streamReader = new StreamReader(fileStreamIn, encoding: homer.GetEncoding()))
+                        {
+                            var csvDat = CsvParser.ParseHeadAndTail(streamReader, homer.GetDelim(), homer.GetQuote());
+
+                            headerRow = csvDat.Item1.ToArray<string>();
+                            string[] rowToWrite = new string[headerRow.Length];
+
+                            //write the header row
+                            streamWriter.Write(RowCleaner.CleanRow(headerRow, homer.GetDelim(), quoteString, escapedQuoteString));
+                            streamWriter.Write(Environment.NewLine);
+
+
+                            int rowNumber = 0;
+
+                            foreach (var line in csvDat.Item2)
+                            {
+                                rowNumber++;
+                                if (cardsToDraw.Contains(rowNumber))
+                                {
+                                    string rowToWriteString = RowCleaner.CleanRow(line.ToArray<string>(), homer.GetDelim(), quoteString, escapedQuoteString) + Environment.NewLine;
+                                    streamWriter.Write(rowToWriteString);
+
+                                    rowsWritten++;
+
+                                    if (rowsWritten == homer.rowsPerSample) break;
+
+                                }
+                            }
+                        }
+                   }
+                    else
+                    {
+
+                        using (var fileStreamIn = File.OpenRead(homer.GetInputFile()))
+                        using (var streamReader = new StreamReader(fileStreamIn, encoding: homer.GetEncoding()))
+                        {
+
+                            var csvDat = CsvParser.Parse(streamReader, homer.GetDelim(), homer.GetQuote());
+                            int rowNumber = 0;
+                            foreach (var line in csvDat)
+                            {
+                                rowNumber++;
+                                if (cardsToDraw.Contains(rowNumber))
+                                {
+
+                                    string rowToWriteString = RowCleaner.CleanRow(line.ToArray<string>(), homer.GetDelim(), quoteString, escapedQuoteString) + Environment.NewLine;
+                                    streamWriter.Write(rowToWriteString);
+
+                                    rowsWritten++;
+
+                                    if (rowsWritten == homer.rowsPerSample) break;
+
+                                }
+                            }
+
+
+                        }
+                    }
+                }
+                #endregion
+
+
+            }
+
+
+
+
+
+
+
+
+            return;
+        }
 
 
         private void backgroundWorker_SubSampleProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
         {
             MainProgressBar.Value = e.ProgressPercentage;
+            StatusLabel.Text = "Writing subsamples... " + e.ProgressPercentage.ToString() + "% complete...";
         }
 
         private void backgroundWorker_SubSampleRunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
 
-            
+            MainProgressBar.Value = 0;
             EnableControls();
             DisableProgBar();
+            ChangeCancelToStartButton();
+            StartButton.Enabled = true;
             //messagebox that it's done
-            NumRowsLabel.Text = "Finished!";
+            StatusLabel.Text = "Finished!";
 
         }
 
@@ -236,7 +373,7 @@ namespace royalsampler
 
 
 
-        private string ToKMB(ulong num)
+        private string ToKMB(int num)
         {
             if (num > 999999999)// || num < -999999999)
             {
@@ -260,6 +397,32 @@ namespace royalsampler
 
 
 
+    }
+
+
+    public static class RandGenerator
+    {
+
+        public static ulong GenRandUlong(ulong min, ulong max)
+        {
+            Random random = new Random();
+            //Working with ulong so that modulo works correctly with values > long.MaxValue
+            ulong uRange = (ulong)(max - min);
+
+            //Prevent a modolo bias; see https://stackoverflow.com/a/10984975/238419
+            //for more information.
+            //In the worst case, the expected number of calls is 2 (though usually it's
+            //much closer to 1) so this loop doesn't really hurt performance at all.
+            ulong ulongRand;
+            do
+            {
+                byte[] buf = new byte[8];
+                random.NextBytes(buf);
+                ulongRand = (ulong)BitConverter.ToInt64(buf, 0);
+            } while (ulongRand > ulong.MaxValue - ((ulong.MaxValue % uRange) + 1) % uRange);
+
+            return (ulong)(ulongRand % uRange) + min;
+        }
     }
 
 

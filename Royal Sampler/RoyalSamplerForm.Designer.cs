@@ -41,13 +41,13 @@
             this.QuoteTextBox = new System.Windows.Forms.TextBox();
             this.DelimiterTextBox = new System.Windows.Forms.TextBox();
             this.SubsamplingGroupBox = new System.Windows.Forms.GroupBox();
-            this.AllowReplacementsCheckbox = new System.Windows.Forms.CheckBox();
-            this.MainProgressBar = new System.Windows.Forms.ProgressBar();
-            this.NumRowsLabel = new System.Windows.Forms.Label();
-            this.labelNumSubsamples = new System.Windows.Forms.Label();
-            this.NumSubsamplesTextbox = new System.Windows.Forms.TextBox();
             this.labelRowsPerSample = new System.Windows.Forms.Label();
             this.RowsPerSampleTextbox = new System.Windows.Forms.TextBox();
+            this.labelNumSubsamples = new System.Windows.Forms.Label();
+            this.AllowReplacementsCheckbox = new System.Windows.Forms.CheckBox();
+            this.NumSubsamplesTextbox = new System.Windows.Forms.TextBox();
+            this.MainProgressBar = new System.Windows.Forms.ProgressBar();
+            this.StatusLabel = new System.Windows.Forms.Label();
             this.StartButton = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SubsamplingGroupBox.SuspendLayout();
@@ -178,53 +178,6 @@
             this.SubsamplingGroupBox.TabStop = false;
             this.SubsamplingGroupBox.Text = "Subsampling Settings";
             // 
-            // AllowReplacementsCheckbox
-            // 
-            this.AllowReplacementsCheckbox.AutoSize = true;
-            this.AllowReplacementsCheckbox.Location = new System.Drawing.Point(15, 194);
-            this.AllowReplacementsCheckbox.Name = "AllowReplacementsCheckbox";
-            this.AllowReplacementsCheckbox.Size = new System.Drawing.Size(246, 23);
-            this.AllowReplacementsCheckbox.TabIndex = 102;
-            this.AllowReplacementsCheckbox.Text = "Subsample with Replacement";
-            this.AllowReplacementsCheckbox.UseVisualStyleBackColor = true;
-            // 
-            // MainProgressBar
-            // 
-            this.MainProgressBar.Location = new System.Drawing.Point(12, 429);
-            this.MainProgressBar.Name = "MainProgressBar";
-            this.MainProgressBar.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.MainProgressBar.Size = new System.Drawing.Size(619, 43);
-            this.MainProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
-            this.MainProgressBar.TabIndex = 0;
-            // 
-            // NumRowsLabel
-            // 
-            this.NumRowsLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.NumRowsLabel.Location = new System.Drawing.Point(12, 404);
-            this.NumRowsLabel.Name = "NumRowsLabel";
-            this.NumRowsLabel.Size = new System.Drawing.Size(619, 22);
-            this.NumRowsLabel.TabIndex = 0;
-            this.NumRowsLabel.Text = "Waiting...";
-            this.NumRowsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // labelNumSubsamples
-            // 
-            this.labelNumSubsamples.AutoSize = true;
-            this.labelNumSubsamples.Location = new System.Drawing.Point(15, 38);
-            this.labelNumSubsamples.Name = "labelNumSubsamples";
-            this.labelNumSubsamples.Size = new System.Drawing.Size(254, 19);
-            this.labelNumSubsamples.TabIndex = 0;
-            this.labelNumSubsamples.Text = "Number of Subsamples to Draw:";
-            // 
-            // NumSubsamplesTextbox
-            // 
-            this.NumSubsamplesTextbox.Location = new System.Drawing.Point(15, 60);
-            this.NumSubsamplesTextbox.Name = "NumSubsamplesTextbox";
-            this.NumSubsamplesTextbox.Size = new System.Drawing.Size(265, 26);
-            this.NumSubsamplesTextbox.TabIndex = 100;
-            this.NumSubsamplesTextbox.Text = "1000";
-            this.NumSubsamplesTextbox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            // 
             // labelRowsPerSample
             // 
             this.labelRowsPerSample.AutoSize = true;
@@ -242,6 +195,53 @@
             this.RowsPerSampleTextbox.TabIndex = 101;
             this.RowsPerSampleTextbox.Text = "100000";
             this.RowsPerSampleTextbox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // labelNumSubsamples
+            // 
+            this.labelNumSubsamples.AutoSize = true;
+            this.labelNumSubsamples.Location = new System.Drawing.Point(15, 38);
+            this.labelNumSubsamples.Name = "labelNumSubsamples";
+            this.labelNumSubsamples.Size = new System.Drawing.Size(254, 19);
+            this.labelNumSubsamples.TabIndex = 0;
+            this.labelNumSubsamples.Text = "Number of Subsamples to Draw:";
+            // 
+            // AllowReplacementsCheckbox
+            // 
+            this.AllowReplacementsCheckbox.AutoSize = true;
+            this.AllowReplacementsCheckbox.Location = new System.Drawing.Point(15, 194);
+            this.AllowReplacementsCheckbox.Name = "AllowReplacementsCheckbox";
+            this.AllowReplacementsCheckbox.Size = new System.Drawing.Size(246, 23);
+            this.AllowReplacementsCheckbox.TabIndex = 102;
+            this.AllowReplacementsCheckbox.Text = "Subsample with Replacement";
+            this.AllowReplacementsCheckbox.UseVisualStyleBackColor = true;
+            // 
+            // NumSubsamplesTextbox
+            // 
+            this.NumSubsamplesTextbox.Location = new System.Drawing.Point(15, 60);
+            this.NumSubsamplesTextbox.Name = "NumSubsamplesTextbox";
+            this.NumSubsamplesTextbox.Size = new System.Drawing.Size(265, 26);
+            this.NumSubsamplesTextbox.TabIndex = 100;
+            this.NumSubsamplesTextbox.Text = "1000";
+            this.NumSubsamplesTextbox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // MainProgressBar
+            // 
+            this.MainProgressBar.Location = new System.Drawing.Point(12, 429);
+            this.MainProgressBar.Name = "MainProgressBar";
+            this.MainProgressBar.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.MainProgressBar.Size = new System.Drawing.Size(619, 33);
+            this.MainProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
+            this.MainProgressBar.TabIndex = 0;
+            // 
+            // StatusLabel
+            // 
+            this.StatusLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.StatusLabel.Location = new System.Drawing.Point(12, 404);
+            this.StatusLabel.Name = "StatusLabel";
+            this.StatusLabel.Size = new System.Drawing.Size(619, 22);
+            this.StatusLabel.TabIndex = 0;
+            this.StatusLabel.Text = "Waiting...";
+            this.StatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // StartButton
             // 
@@ -261,7 +261,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(640, 474);
             this.Controls.Add(this.StartButton);
-            this.Controls.Add(this.NumRowsLabel);
+            this.Controls.Add(this.StatusLabel);
             this.Controls.Add(this.MainProgressBar);
             this.Controls.Add(this.SubsamplingGroupBox);
             this.Controls.Add(this.groupBox1);
@@ -293,7 +293,7 @@
         private System.Windows.Forms.GroupBox SubsamplingGroupBox;
         private System.Windows.Forms.CheckBox AllowReplacementsCheckbox;
         private System.Windows.Forms.ProgressBar MainProgressBar;
-        private System.Windows.Forms.Label NumRowsLabel;
+        private System.Windows.Forms.Label StatusLabel;
         private System.Windows.Forms.Label labelRowsPerSample;
         private System.Windows.Forms.TextBox RowsPerSampleTextbox;
         private System.Windows.Forms.Label labelNumSubsamples;

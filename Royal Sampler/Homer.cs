@@ -83,12 +83,12 @@ namespace royalsampler
         /// <summary>
         /// Retrieve the already-determined number of rows.
         /// </summary>
-        public ulong GetCardCount()
+        public int GetCardCount()
         {
             return this.deckOfCards.totalNumberOfRows;
         }
 
-        public void SetCardCount(ulong nrow, ulong nerr)
+        public void SetCardCount(int nrow, int nerr)
         {
             this.deckOfCards.totalNumberOfRows = nrow;
             this.deckOfCards.rowErrorCount = nerr;
@@ -135,8 +135,8 @@ namespace royalsampler
     {
         internal string inputFileLocation { get; set; }
         internal string outputFolder { get; set; }
-        internal ulong totalNumberOfRows { get; set; }
-        internal ulong rowErrorCount { get; set; }
+        internal int totalNumberOfRows { get; set; }
+        internal int rowErrorCount { get; set; }
         internal char delimiter { get; set; }
         internal char quote { get; set; }
 
