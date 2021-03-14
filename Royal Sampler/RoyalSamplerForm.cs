@@ -261,6 +261,8 @@ namespace royalsampler
             {
                 labelNumSubsamples.Text = "Number of Subsamples to Draw:";
                 labelRowsPerSample.Text = "Number of Rows per Sample";
+                NumSubsamplesTextbox.Text = "1000";
+                RowsPerSampleTextbox.Text = "100000";
                 AllowReplacementsCheckbox.Enabled = true;
                 RandomSeedTextBox.Enabled = true;
             }
@@ -268,6 +270,19 @@ namespace royalsampler
             {
                 labelNumSubsamples.Text = "Start Sampling at Row #:";
                 labelRowsPerSample.Text = "Stop Sampling at Row #:";
+
+                NumSubsamplesTextbox.Text = "1";
+                
+                if (!String.IsNullOrEmpty(InputFileTextbox.Text))
+                {
+                    RowsPerSampleTextbox.Text = hoju.GetRowCount().ToString();
+                }
+                else
+                {
+                    RowsPerSampleTextbox.Text = "10000";
+                }
+                    
+
                 AllowReplacementsCheckbox.Enabled = false;
                 RandomSeedTextBox.Enabled = false;
 
