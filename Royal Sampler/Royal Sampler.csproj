@@ -23,6 +23,10 @@
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <PublishTrimmed>true</PublishTrimmed>
     <PublishReadyToRun>true</PublishReadyToRun>
+    <Version>1.1.0</Version>
+    <PackageId>Royal Sampler</PackageId>
+    <PackageProjectUrl>https://www.ryanboyd.io</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/ryanboyd/Royal-Sampler</RepositoryUrl>
     
     
   </PropertyGroup>
@@ -33,7 +37,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Update="BGWorker - Split into Chunks.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="BGWorker - Targeted Subsample.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Launch Split into Chunks.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Launch Targeted Subsampler.cs">

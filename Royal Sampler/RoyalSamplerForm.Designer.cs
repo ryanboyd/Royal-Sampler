@@ -244,6 +244,7 @@
             this.RowsPerSampleTextbox.TabIndex = 101;
             this.RowsPerSampleTextbox.Text = "100000";
             this.RowsPerSampleTextbox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.RowsPerSampleTextbox.Enter += new System.EventHandler(this.NumRowsPerSampleTextbox_Enter);
             // 
             // labelNumSubsamples
             // 
@@ -272,6 +273,7 @@
             this.NumSubsamplesTextbox.TabIndex = 100;
             this.NumSubsamplesTextbox.Text = "1000";
             this.NumSubsamplesTextbox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.NumSubsamplesTextbox.Enter += new System.EventHandler(this.NumSubsamplesTextbox_Enter);
             // 
             // MainProgressBar
             // 

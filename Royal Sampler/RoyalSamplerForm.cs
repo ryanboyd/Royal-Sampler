@@ -9,7 +9,7 @@ namespace royalsampler
     public partial class RoyalSamplerForm : Form
     {
 
-        static string versionNumber = "v1.0.0, by Ryan L. Boyd";
+        static string versionNumber = "v1.1.0, by Ryan L. Boyd";
 
         public RoyalSamplerForm()
         {
@@ -26,10 +26,11 @@ namespace royalsampler
 
             DisableProgBar();
 
-            SubsamplingModeComboBox.Items.Add("Randomized Subsampling");
+            SubsamplingModeComboBox.Items.Add("Split File into Chunks");
             SubsamplingModeComboBox.Items.Add("Targeted Subsample");
-
-            SubsamplingModeComboBox.SelectedItem = "Randomized Subsampling";
+            SubsamplingModeComboBox.Items.Add("Randomized Subsampling");
+            
+            SubsamplingModeComboBox.SelectedItem = "Split File into Chunks";
 
             foreach (var encoding in Encoding.GetEncodings())
             {
@@ -51,12 +52,11 @@ namespace royalsampler
             DelimiterTextBox.Text = ",";
             QuoteTextBox.Text = "\"";
             ContainsHeaderCheckbox.Checked = true;
-            NumSubsamplesTextbox.Text = "1000";
+            NumSubsamplesTextbox.Text = "5";
             NumSubsamplesTextbox.MaxLength = 10;
-            RowsPerSampleTextbox.Text = "100000";
+            RowsPerSampleTextbox.Text = "";
             RowsPerSampleTextbox.MaxLength = 10;
             InputFileTextbox.Select();
-
 
             InputFileTextbox.Enabled = false;
             MainProgressBar.Minimum = 0;
@@ -183,7 +183,12 @@ namespace royalsampler
                 AllowReplacementsCheckbox.Enabled = false;
                 RandomSeedTextBox.Enabled = false;
             }
-           
+            else if (SubsamplingModeComboBox.GetItemText(SubsamplingModeComboBox.SelectedItem) == "Split File into Chunks")
+            {
+                AllowReplacementsCheckbox.Enabled = false;
+                RandomSeedTextBox.Enabled = false;
+            }
+
         }
 
         private void ChangeStartToCancelButton() 
@@ -248,6 +253,10 @@ namespace royalsampler
                 {
                     LaunchTargetedSubsampler();
                 }
+                else if (selectedItemText == "Split File into Chunks")
+                {
+                    LaunchSplitIntoChunks();
+                }
 
             }
         }
@@ -287,7 +296,39 @@ namespace royalsampler
                 RandomSeedTextBox.Enabled = false;
 
             }
+            else if (selectedItemText == "Split File into Chunks")
+            {
+                labelNumSubsamples.Text = "Split into N files:";
+                labelRowsPerSample.Text = "Split with N rows per file:";
 
+                NumSubsamplesTextbox.Text = "5";
+                RowsPerSampleTextbox.Text = "";
+
+                AllowReplacementsCheckbox.Enabled = false;
+                RandomSeedTextBox.Enabled = false;
+            }
+
+            
+
+        }
+
+        private void NumSubsamplesTextbox_Enter(object sender, EventArgs e)
+        {
+            string selectedItemText = SubsamplingModeComboBox.GetItemText(SubsamplingModeComboBox.SelectedItem);
+            if (selectedItemText == "Split File into Chunks")
+            {
+                RowsPerSampleTextbox.Text = "";
+            }
+
+        }
+
+        private void NumRowsPerSampleTextbox_Enter(object sender, EventArgs e)
+        {
+            string selectedItemText = SubsamplingModeComboBox.GetItemText(SubsamplingModeComboBox.SelectedItem);
+            if (selectedItemText == "Split File into Chunks")
+            {
+                NumSubsamplesTextbox.Text = "";
+            }
         }
     }
 
