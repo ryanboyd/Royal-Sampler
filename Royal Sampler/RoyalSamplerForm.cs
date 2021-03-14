@@ -15,7 +15,7 @@ namespace royalsampler
     public partial class RoyalSamplerForm : Form
     {
 
-        static string versionNumber = "v1.0.0";
+        static string versionNumber = "v1.0.0, by Ryan L. Boyd";
 
         public RoyalSamplerForm()
         {
@@ -118,7 +118,7 @@ namespace royalsampler
             
 
             hoju = new Homer();
-            hoju.ArrangeDeck(fileIn: InputFileTextbox.Text, 
+            hoju.InitializeFileDetails(fileIn: InputFileTextbox.Text, 
                              allowRepl: AllowReplacementsCheckbox.Checked, 
                              containsHead: ContainsHeaderCheckbox.Checked, 
                              fEncode: Encoding.GetEncoding(EncodingComboBox.SelectedItem.ToString()),

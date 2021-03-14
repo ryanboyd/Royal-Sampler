@@ -31,7 +31,7 @@ namespace royalsampler
         /// <summary>
         /// This is used to initialize/set up your FileDetails object — i.e., your "deck of cards"
         /// </summary>
-        public void ArrangeDeck(string fileIn, bool allowRepl, bool containsHead, Encoding fEncode, char quotechar, char delimchar)
+        public void InitializeFileDetails(string fileIn, bool allowRepl, bool containsHead, Encoding fEncode, char quotechar, char delimchar)
         {
             fileDetails = new FileDetails(fileIn, containsHead, fEncode, quotechar, delimchar);
         }
