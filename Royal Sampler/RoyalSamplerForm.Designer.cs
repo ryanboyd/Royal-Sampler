@@ -279,13 +279,13 @@
             this.StatusLabel.Text = "Waiting...";
             this.StatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // columnNameCheckBoxes
+            // ColumnsToRetainCheckedListBox
             // 
             this.ColumnsToRetainCheckedListBox.CheckOnClick = true;
             this.ColumnsToRetainCheckedListBox.Font = new System.Drawing.Font("MS Reference Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ColumnsToRetainCheckedListBox.FormattingEnabled = true;
             this.ColumnsToRetainCheckedListBox.Location = new System.Drawing.Point(652, 34);
-            this.ColumnsToRetainCheckedListBox.Name = "columnNameCheckBoxes";
+            this.ColumnsToRetainCheckedListBox.Name = "ColumnsToRetainCheckedListBox";
             this.ColumnsToRetainCheckedListBox.ScrollAlwaysVisible = true;
             this.ColumnsToRetainCheckedListBox.Size = new System.Drawing.Size(302, 344);
             this.ColumnsToRetainCheckedListBox.TabIndex = 200;
