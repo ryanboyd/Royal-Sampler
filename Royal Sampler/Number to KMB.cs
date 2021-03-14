@@ -16,7 +16,7 @@ namespace royalsampler
     {
 
 
-        private string ToKMB(int num)
+        private string ToKMB(ulong num)
         {
             if (num > 999999999)// || num < -999999999)
             {

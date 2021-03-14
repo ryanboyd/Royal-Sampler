@@ -29,6 +29,11 @@ namespace royalsampler
 
             DisableProgBar();
 
+            SubsamplingModeComboBox.Items.Add("Randomized Subsampling");
+            SubsamplingModeComboBox.Items.Add("Targeted Subsample");
+
+            SubsamplingModeComboBox.SelectedItem = "Randomized Subsampling";
+
             foreach (var encoding in Encoding.GetEncodings())
             {
                 EncodingComboBox.Items.Add(encoding.Name);
@@ -48,7 +53,9 @@ namespace royalsampler
             QuoteTextBox.Text = "\"";
             ContainsHeaderCheckbox.Checked = true;
             NumSubsamplesTextbox.Text = "1000";
+            NumSubsamplesTextbox.MaxLength = 10;
             RowsPerSampleTextbox.Text = "100000";
+            RowsPerSampleTextbox.MaxLength = 10;
             InputFileTextbox.Select();
 
 
@@ -113,11 +120,11 @@ namespace royalsampler
                              quotechar: QuoteTextBox.Text[0],
                              delimchar: DelimiterTextBox.Text[0]);
 
-            BackgroundWorker cardCounter = new BackgroundWorker();
-            cardCounter.WorkerReportsProgress = true;
-            cardCounter.DoWork += new DoWorkEventHandler(backgroundWorker_CountRows);
-            cardCounter.ProgressChanged += new ProgressChangedEventHandler(backgroundWorker_CountRowsProgressChanged);
-            cardCounter.RunWorkerCompleted += new RunWorkerCompletedEventHandler(backgroundWorker_CountRowsRunWorkerCompleted);
+            BackgroundWorker rowCounter = new BackgroundWorker();
+            rowCounter.WorkerReportsProgress = true;
+            rowCounter.DoWork += new DoWorkEventHandler(backgroundWorker_CountRows);
+            rowCounter.ProgressChanged += new ProgressChangedEventHandler(backgroundWorker_CountRowsProgressChanged);
+            rowCounter.RunWorkerCompleted += new RunWorkerCompletedEventHandler(backgroundWorker_CountRowsRunWorkerCompleted);
 
             DisableControls();
             StartButton.Enabled = false;
@@ -127,7 +134,7 @@ namespace royalsampler
             
 
             //let's get counting, but on a background thread
-            cardCounter.RunWorkerAsync(hoju);
+            rowCounter.RunWorkerAsync(hoju);
 
         }
 
@@ -147,6 +154,7 @@ namespace royalsampler
             RowsPerSampleTextbox.Enabled = false;
             RandomSeedTextBox.Enabled = false;
             ColumnsToRetainCheckedListBox.Enabled = false;
+            SubsamplingModeComboBox.Enabled = false;
 
             AllowReplacementsCheckbox.Enabled = false;
             
@@ -161,10 +169,22 @@ namespace royalsampler
             OpenFileButton.Enabled = true;
             NumSubsamplesTextbox.Enabled = true;
             RowsPerSampleTextbox.Enabled = true;
-            RandomSeedTextBox.Enabled = true;
+            
             ColumnsToRetainCheckedListBox.Enabled = true;
+            SubsamplingModeComboBox.Enabled = true;
 
-            AllowReplacementsCheckbox.Enabled = true;
+
+            if (SubsamplingModeComboBox.GetItemText(SubsamplingModeComboBox.SelectedItem) == "Randomized Subsampling")
+            {
+                AllowReplacementsCheckbox.Enabled = true;
+                RandomSeedTextBox.Enabled = true;
+            }
+            else if (SubsamplingModeComboBox.GetItemText(SubsamplingModeComboBox.SelectedItem) == "Targeted Subsample")
+            {
+                AllowReplacementsCheckbox.Enabled = false;
+                RandomSeedTextBox.Enabled = false;
+            }
+           
         }
 
         private void ChangeStartToCancelButton() 
@@ -211,6 +231,8 @@ namespace royalsampler
         private void StartButton_Click(object sender, EventArgs e)
         {
 
+            string selectedItemText = SubsamplingModeComboBox.GetItemText(SubsamplingModeComboBox.SelectedItem);
+
             if (theDealer.IsBusy)
             {
                 theDealer.CancelAsync();
@@ -219,126 +241,40 @@ namespace royalsampler
             else
             {
 
-                int numSamples = 0;
-                int numRowsPerSample = 0;
-
-                NumSubsamplesTextbox.Text = NumSubsamplesTextbox.Text.Trim();
-                RowsPerSampleTextbox.Text = RowsPerSampleTextbox.Text.Trim();
-                RandomSeedTextBox.Text = RandomSeedTextBox.Text.Trim();
-
-
-                if (!int.TryParse(NumSubsamplesTextbox.Text, out numSamples) || numSamples < 1) 
+                if (selectedItemText == "Randomized Subsampling")
                 {
-                    MessageBox.Show("Your \"Number of Subsamples\" must be a positive integer.", "D'oh!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
+                    LaunchRandomSubsampler();
                 }
-
-                if (!int.TryParse(RowsPerSampleTextbox.Text, out numRowsPerSample) || numRowsPerSample < 1)
+                else if (selectedItemText == "Targeted Subsample")
                 {
-                    MessageBox.Show("Your \"Number of Rows per Sample\" must be a positive integer.", "D'oh!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-
-                if (!int.TryParse(RandomSeedTextBox.Text, out numRowsPerSample) && !String.IsNullOrEmpty(RandomSeedTextBox.Text))
-                {
-                    MessageBox.Show("Your random seed must be an integer. If you do not want to use a randomization seed, you can leave the \"Random Seed\" box blank.", "D'oh!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-
-                if (String.IsNullOrEmpty(InputFileTextbox.Text))
-                {
-                    MessageBox.Show("Your must first select a file that you would like to subsample.", "D'oh!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-
-                if (String.IsNullOrEmpty(DelimiterTextBox.Text))
-                {
-                    MessageBox.Show("Your must select your delimiter character for this CSV file.", "D'oh!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-
-                if (String.IsNullOrEmpty(QuoteTextBox.Text))
-                {
-                    MessageBox.Show("Your must select your quoting character for this CSV file.", "D'oh!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-
-                if (ColumnsToRetainCheckedListBox.CheckedIndices.Count < 1)
-                {
-                    MessageBox.Show("Your must select at least one column to retain for your subsampling.", "D'oh!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-                
-
-
-
-
-
-
-                FolderBrowserDialog folderBrowser = new FolderBrowserDialog();
-                folderBrowser.UseDescriptionForTitle = true;
-                folderBrowser.ShowNewFolderButton = true;
-                folderBrowser.Description = "Please choose the OUTPUT location for your files";
-                
-                string inputPath = Path.GetDirectoryName(InputFileTextbox.Text);
-                if (!Path.EndsInDirectorySeparator(inputPath)) inputPath += Path.DirectorySeparatorChar;
-
-                folderBrowser.SelectedPath = inputPath;
-
-                if (folderBrowser.ShowDialog() != DialogResult.Cancel)
-                {
-
-                    if (folderBrowser.SelectedPath == Path.GetDirectoryName(InputFileTextbox.Text))
-                    {
-                        MessageBox.Show("You cannot save your subsampled output files to the same folder as your input file.", "D'oh!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
-                    }
-
-                    hoju.SetOutputFolder(folderBrowser.SelectedPath);
-                    hoju.numberOfSamples = int.Parse(NumSubsamplesTextbox.Text);
-                    hoju.rowsPerSample = int.Parse(RowsPerSampleTextbox.Text);
-                    hoju.allowReplacement = AllowReplacementsCheckbox.Checked;
-                    hoju.randSeedString = RandomSeedTextBox.Text;
-                    hoju.retainedIndices = new HashSet<int>();
-
-                    foreach (int index in ColumnsToRetainCheckedListBox.CheckedIndices) hoju.retainedIndices.Add(index);
-
-
-
-
-                    DisableControls();
-                    ChangeStartToCancelButton();
-
-                    theDealer = new BackgroundWorker();
-                
-                    if (AllowReplacementsCheckbox.Checked)
-                    {
-                        theDealer.DoWork += new DoWorkEventHandler(backgroundWorker_SubSampleWithReplacement);
-                    }
-                    else
-                    {
-                        theDealer.DoWork += new DoWorkEventHandler(backgroundWorker_SubSampleWithoutReplacement);
-                    }
-                
-                    theDealer.ProgressChanged += new ProgressChangedEventHandler(backgroundWorker_SubSampleProgressChanged);
-                    theDealer.RunWorkerCompleted += new RunWorkerCompletedEventHandler(backgroundWorker_SubSampleRunWorkerCompleted);
-                    theDealer.WorkerReportsProgress = true;
-                    theDealer.WorkerSupportsCancellation = true;
-
-                    StatusLabel.Text = "Preparing to subsample...";
-                    EnableProgBarNeverEnding();
-                    theDealer.RunWorkerAsync(hoju);
-
-
+                    LaunchTargetedSubsampler();
                 }
 
             }
         }
 
+        private void SubsamplingModeComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
 
+            string selectedItemText = SubsamplingModeComboBox.GetItemText(SubsamplingModeComboBox.SelectedItem);
 
+            if (selectedItemText == "Randomized Subsampling")
+            {
+                labelNumSubsamples.Text = "Number of Subsamples to Draw:";
+                labelRowsPerSample.Text = "Number of Rows per Sample";
+                AllowReplacementsCheckbox.Enabled = true;
+                RandomSeedTextBox.Enabled = true;
+            }
+            else if (selectedItemText == "Targeted Subsample")
+            {
+                labelNumSubsamples.Text = "Start Sampling from Row #:";
+                labelRowsPerSample.Text = "Stop Sampling at Row #:";
+                AllowReplacementsCheckbox.Enabled = false;
+                RandomSeedTextBox.Enabled = false;
 
+            }
 
+        }
     }
 
 

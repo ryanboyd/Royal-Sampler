@@ -30,10 +30,14 @@ namespace royalsampler
             string escapedQuoteString = homer.GetQuote().ToString() + homer.GetQuote().ToString();
             int numCols = homer.retainedIndices.Count;
 
-            for (int sampleNumber = 0; sampleNumber < homer.numberOfSamples; sampleNumber++)
+            for (ulong sampleNumber = 0; sampleNumber < homer.numberOfSamples; sampleNumber++)
             {
 
-                if ((sender as BackgroundWorker).CancellationPending) break;
+                if ((sender as BackgroundWorker).CancellationPending)
+                {
+                    e.Result = "Cancelled";
+                    break;
+                }
 
                 //report progress
                 //MessageBox.Show((((double)sampleNumber / homer.numberOfSamples) * 100).ToString());
@@ -41,30 +45,27 @@ namespace royalsampler
                 (sender as BackgroundWorker).ReportProgress(pctDone);
 
 
-                Dictionary<int, int> cardsToDraw = new Dictionary<int, int>();
+                Dictionary<ulong, int> rowsToSample = new Dictionary<ulong, int>();
                 
                 #region Determine Our Samples Needed
            
                     
-                int cardsDrawnCount = 0;
+                ulong rowsSampledCount = 0;
 
-                //decimal pctSample = ((ulong)homer.rowsPerSample / homer.GetCardCount()) * 100;
-                //int drawLikelihood = (int)Math.Round(pctSample, 0, MidpointRounding.AwayFromZero);
-
-                while (cardsDrawnCount < homer.rowsPerSample)
+                while (rowsSampledCount < homer.rowsPerSample)
                 {
-                    int randomDraw = random.Next(1, homer.GetRowCount());
+                    ulong randomDraw = random.NextLong(1, homer.GetRowCount());
 
-                    if (cardsToDraw.ContainsKey(randomDraw))
+                    if (rowsToSample.ContainsKey(randomDraw))
                     {
-                        cardsToDraw[randomDraw]++;
+                        rowsToSample[randomDraw]++;
                     }
                     else
                     {
-                        cardsToDraw.Add(randomDraw, 1);
+                        rowsToSample.Add(randomDraw, 1);
                     }
 
-                    cardsDrawnCount++;
+                    rowsSampledCount++;
 
                 }
 
@@ -74,90 +75,102 @@ namespace royalsampler
 
 
                 #region Get Busy Writin' or Get Busy Dyin'
-                int rowsWritten = 0;
+                ulong rowsWritten = 0;
 
                 //first we need to open up our output filename
                 string filenameOut;
                 if (String.IsNullOrEmpty(homer.randSeedString))
                 {
-                    filenameOut = Path.Combine(homer.GetOutputFolder(), "subsample" + (sampleNumber + 1).ToString(filenamePadding) + ".csv");
+                    filenameOut = Path.Combine(homer.GetOutputLocation(), "subsample" + (sampleNumber + 1).ToString(filenamePadding) + ".csv");
                 }
                 else
                 {
-                    filenameOut = Path.Combine(homer.GetOutputFolder(), homer.randSeedString + "_subsample" + (sampleNumber + 1).ToString(filenamePadding) + ".csv");
+                    filenameOut = Path.Combine(homer.GetOutputLocation(), homer.randSeedString + "_subsample" + (sampleNumber + 1).ToString(filenamePadding) + ".csv");
                 }
 
-                using (FileStream fileStreamOut = new FileStream(filenameOut, FileMode.Create, FileAccess.Write, FileShare.None))
-                using (StreamWriter streamWriter = new StreamWriter(fileStreamOut, homer.GetEncoding()))
+
+                try
                 {
 
-                    if (homer.HasHeader())
+                
+
+                    using (FileStream fileStreamOut = new FileStream(filenameOut, FileMode.Create, FileAccess.Write, FileShare.None))
+                    using (StreamWriter streamWriter = new StreamWriter(fileStreamOut, homer.GetEncoding()))
                     {
-                        string[] headerRow;
 
-                        using (var fileStreamIn = File.OpenRead(homer.GetInputFile()))
-                        using (var streamReader = new StreamReader(fileStreamIn, encoding: homer.GetEncoding()))
+                        if (homer.HasHeader())
                         {
+                            string[] headerRow;
 
-                            var csvDat = CsvParser.ParseHeadAndTail(streamReader, homer.GetDelim(), homer.GetQuote());
+                            using (var fileStreamIn = File.OpenRead(homer.GetInputFile()))
+                            using (var streamReader = new StreamReader(fileStreamIn, encoding: homer.GetEncoding()))
+                            {
 
-                            headerRow = csvDat.Item1.ToArray<string>();
-                            string rowToWriteString = RowCleaner.CleanRow(headerRow, homer.GetDelim(), quoteString, escapedQuoteString, numCols, hoju.retainedIndices);
+                                var csvDat = CsvParser.ParseHeadAndTail(streamReader, homer.GetDelim(), homer.GetQuote());
 
-                            //write the header row
-                            streamWriter.Write(rowToWriteString);
+                                headerRow = csvDat.Item1.ToArray<string>();
+                                string rowToWriteString = RowCleaner.CleanRow(headerRow, homer.GetDelim(), quoteString, escapedQuoteString, numCols, hoju.retainedIndices);
+
+                                //write the header row
+                                streamWriter.Write(rowToWriteString);
                             
 
-                            int rowNumber = 0;
+                                ulong rowNumber = 0;
 
-                            foreach (var line in csvDat.Item2)
-                            {
-                                rowNumber++;
-                                if (cardsToDraw.ContainsKey(rowNumber))
+                                foreach (var line in csvDat.Item2)
                                 {
+                                    rowNumber++;
+                                    if (rowsToSample.ContainsKey(rowNumber))
+                                    {
 
-                                    rowToWriteString = RowCleaner.CleanRow(line.ToArray<string>(), homer.GetDelim(), quoteString, escapedQuoteString, numCols, hoju.retainedIndices);
-                                    for (int numDraws = 0; numDraws < cardsToDraw[rowNumber]; numDraws++) streamWriter.Write(rowToWriteString);
+                                        rowToWriteString = RowCleaner.CleanRow(line.ToArray<string>(), homer.GetDelim(), quoteString, escapedQuoteString, numCols, hoju.retainedIndices);
+                                        for (int numDraws = 0; numDraws < rowsToSample[rowNumber]; numDraws++) streamWriter.Write(rowToWriteString);
 
-                                    rowsWritten += cardsToDraw[rowNumber];
+                                        rowsWritten += (ulong)rowsToSample[rowNumber];
 
-                                    if (rowsWritten == homer.rowsPerSample) break;
+                                        if (rowsWritten == homer.rowsPerSample) break;
 
-                                }
-                            }   
+                                    }
+                                }   
+                            }
                         }
-                    }
-                    else
-                    {
-                        using (var fileStreamIn = File.OpenRead(homer.GetInputFile()))
-                        using (var streamReader = new StreamReader(fileStreamIn, encoding: homer.GetEncoding()))
+                        else
                         {
-
-                            var csvDat = CsvParser.Parse(streamReader, homer.GetDelim(), homer.GetQuote());
-
-                            int rowNumber = 0;
-
-                            foreach (var line in csvDat)
+                            using (var fileStreamIn = File.OpenRead(homer.GetInputFile()))
+                            using (var streamReader = new StreamReader(fileStreamIn, encoding: homer.GetEncoding()))
                             {
-                                rowNumber++;
-                                if (cardsToDraw.ContainsKey(rowNumber))
+
+                                var csvDat = CsvParser.Parse(streamReader, homer.GetDelim(), homer.GetQuote());
+
+                                ulong rowNumber = 0;
+
+                                foreach (var line in csvDat)
                                 {
+                                    rowNumber++;
+                                    if (rowsToSample.ContainsKey(rowNumber))
+                                    {
 
-                                    string rowToWriteString = RowCleaner.CleanRow(line.ToArray<string>(), homer.GetDelim(), quoteString, escapedQuoteString, numCols, hoju.retainedIndices);
-                                    for (int numDraws = 0; numDraws < cardsToDraw[rowNumber]; numDraws++) streamWriter.Write(rowToWriteString);
+                                        string rowToWriteString = RowCleaner.CleanRow(line.ToArray<string>(), homer.GetDelim(), quoteString, escapedQuoteString, numCols, hoju.retainedIndices);
+                                        for (int numDraws = 0; numDraws < rowsToSample[rowNumber]; numDraws++) streamWriter.Write(rowToWriteString);
 
-                                    rowsWritten += cardsToDraw[rowNumber];
+                                        rowsWritten += (ulong)rowsToSample[rowNumber];
 
-                                    if (rowsWritten == homer.rowsPerSample) break;
+                                        if (rowsWritten == homer.rowsPerSample) break;
 
+                                    }
                                 }
                             }
                         }
+
                     }
-
+                    #endregion
                 }
-                #endregion
-
+                catch
+                {
+                    MessageBox.Show("There was an error in writing your output file(s). This often occurs when your output file is already open in another application.", "D'oh!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    e.Result = "Cancelled";
+                    return;
+                }
 
             }
 

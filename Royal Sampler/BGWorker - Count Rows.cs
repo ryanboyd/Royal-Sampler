@@ -22,7 +22,7 @@ namespace royalsampler
 
             TimeSpan reportPeriod = TimeSpan.FromMinutes(0.01);
             using (new System.Threading.Timer(
-                           _ => (sender as BackgroundWorker).ReportProgress(((Homer)e.Argument).GetRowCount()), null, reportPeriod, reportPeriod))
+                           _ => (sender as BackgroundWorker).ReportProgress((int)((Homer)e.Argument).GetRowCount()), null, reportPeriod, reportPeriod))
             {
                 e.Result = ((Homer)e.Argument).CountRows();
             }
@@ -33,7 +33,7 @@ namespace royalsampler
 
         private void backgroundWorker_CountRowsProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
         {
-            StatusLabel.Text = "Counting rows... " + ToKMB(e.ProgressPercentage) + " thus far...";
+            StatusLabel.Text = "Counting rows... " + ToKMB((ulong)e.ProgressPercentage) + " thus far...";
         }
 
         private void backgroundWorker_CountRowsRunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)

@@ -41,6 +41,7 @@
             this.QuoteTextBox = new System.Windows.Forms.TextBox();
             this.DelimiterTextBox = new System.Windows.Forms.TextBox();
             this.SubsamplingGroupBox = new System.Windows.Forms.GroupBox();
+            this.SubsamplingModeComboBox = new System.Windows.Forms.ComboBox();
             this.StartButton = new System.Windows.Forms.Button();
             this.labelRandSeed = new System.Windows.Forms.Label();
             this.RandomSeedTextBox = new System.Windows.Forms.TextBox();
@@ -72,7 +73,7 @@
             this.groupBox1.Font = new System.Drawing.Font("MS Reference Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(298, 380);
+            this.groupBox1.Size = new System.Drawing.Size(298, 434);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "CSV File Format Settings";
@@ -117,6 +118,7 @@
             // 
             // EncodingComboBox
             // 
+            this.EncodingComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.EncodingComboBox.FormattingEnabled = true;
             this.EncodingComboBox.Location = new System.Drawing.Point(15, 136);
             this.EncodingComboBox.Name = "EncodingComboBox";
@@ -169,6 +171,7 @@
             // 
             // SubsamplingGroupBox
             // 
+            this.SubsamplingGroupBox.Controls.Add(this.SubsamplingModeComboBox);
             this.SubsamplingGroupBox.Controls.Add(this.StartButton);
             this.SubsamplingGroupBox.Controls.Add(this.labelRandSeed);
             this.SubsamplingGroupBox.Controls.Add(this.RandomSeedTextBox);
@@ -180,16 +183,26 @@
             this.SubsamplingGroupBox.Font = new System.Drawing.Font("MS Reference Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.SubsamplingGroupBox.Location = new System.Drawing.Point(333, 12);
             this.SubsamplingGroupBox.Name = "SubsamplingGroupBox";
-            this.SubsamplingGroupBox.Size = new System.Drawing.Size(298, 380);
+            this.SubsamplingGroupBox.Size = new System.Drawing.Size(298, 434);
             this.SubsamplingGroupBox.TabIndex = 0;
             this.SubsamplingGroupBox.TabStop = false;
             this.SubsamplingGroupBox.Text = "Subsampling Settings";
+            // 
+            // SubsamplingModeComboBox
+            // 
+            this.SubsamplingModeComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.SubsamplingModeComboBox.FormattingEnabled = true;
+            this.SubsamplingModeComboBox.Location = new System.Drawing.Point(13, 35);
+            this.SubsamplingModeComboBox.Name = "SubsamplingModeComboBox";
+            this.SubsamplingModeComboBox.Size = new System.Drawing.Size(265, 27);
+            this.SubsamplingModeComboBox.TabIndex = 7;
+            this.SubsamplingModeComboBox.SelectedIndexChanged += new System.EventHandler(this.SubsamplingModeComboBox_SelectedIndexChanged);
             // 
             // StartButton
             // 
             this.StartButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.StartButton.Font = new System.Drawing.Font("MS Reference Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.StartButton.Location = new System.Drawing.Point(59, 316);
+            this.StartButton.Location = new System.Drawing.Point(57, 369);
             this.StartButton.Name = "StartButton";
             this.StartButton.Size = new System.Drawing.Size(180, 44);
             this.StartButton.TabIndex = 104;
@@ -200,7 +213,7 @@
             // labelRandSeed
             // 
             this.labelRandSeed.AutoSize = true;
-            this.labelRandSeed.Location = new System.Drawing.Point(15, 244);
+            this.labelRandSeed.Location = new System.Drawing.Point(13, 297);
             this.labelRandSeed.Name = "labelRandSeed";
             this.labelRandSeed.Size = new System.Drawing.Size(169, 19);
             this.labelRandSeed.TabIndex = 103;
@@ -208,7 +221,7 @@
             // 
             // RandomSeedTextBox
             // 
-            this.RandomSeedTextBox.Location = new System.Drawing.Point(15, 266);
+            this.RandomSeedTextBox.Location = new System.Drawing.Point(13, 319);
             this.RandomSeedTextBox.Name = "RandomSeedTextBox";
             this.RandomSeedTextBox.Size = new System.Drawing.Size(265, 26);
             this.RandomSeedTextBox.TabIndex = 103;
@@ -217,7 +230,7 @@
             // labelRowsPerSample
             // 
             this.labelRowsPerSample.AutoSize = true;
-            this.labelRowsPerSample.Location = new System.Drawing.Point(15, 114);
+            this.labelRowsPerSample.Location = new System.Drawing.Point(13, 167);
             this.labelRowsPerSample.Name = "labelRowsPerSample";
             this.labelRowsPerSample.Size = new System.Drawing.Size(230, 19);
             this.labelRowsPerSample.TabIndex = 0;
@@ -225,7 +238,7 @@
             // 
             // RowsPerSampleTextbox
             // 
-            this.RowsPerSampleTextbox.Location = new System.Drawing.Point(15, 136);
+            this.RowsPerSampleTextbox.Location = new System.Drawing.Point(13, 189);
             this.RowsPerSampleTextbox.Name = "RowsPerSampleTextbox";
             this.RowsPerSampleTextbox.Size = new System.Drawing.Size(265, 26);
             this.RowsPerSampleTextbox.TabIndex = 101;
@@ -235,7 +248,7 @@
             // labelNumSubsamples
             // 
             this.labelNumSubsamples.AutoSize = true;
-            this.labelNumSubsamples.Location = new System.Drawing.Point(15, 38);
+            this.labelNumSubsamples.Location = new System.Drawing.Point(13, 91);
             this.labelNumSubsamples.Name = "labelNumSubsamples";
             this.labelNumSubsamples.Size = new System.Drawing.Size(254, 19);
             this.labelNumSubsamples.TabIndex = 0;
@@ -244,7 +257,7 @@
             // AllowReplacementsCheckbox
             // 
             this.AllowReplacementsCheckbox.AutoSize = true;
-            this.AllowReplacementsCheckbox.Location = new System.Drawing.Point(15, 194);
+            this.AllowReplacementsCheckbox.Location = new System.Drawing.Point(13, 247);
             this.AllowReplacementsCheckbox.Name = "AllowReplacementsCheckbox";
             this.AllowReplacementsCheckbox.Size = new System.Drawing.Size(246, 23);
             this.AllowReplacementsCheckbox.TabIndex = 102;
@@ -253,7 +266,7 @@
             // 
             // NumSubsamplesTextbox
             // 
-            this.NumSubsamplesTextbox.Location = new System.Drawing.Point(15, 60);
+            this.NumSubsamplesTextbox.Location = new System.Drawing.Point(13, 113);
             this.NumSubsamplesTextbox.Name = "NumSubsamplesTextbox";
             this.NumSubsamplesTextbox.Size = new System.Drawing.Size(265, 26);
             this.NumSubsamplesTextbox.TabIndex = 100;
@@ -262,7 +275,7 @@
             // 
             // MainProgressBar
             // 
-            this.MainProgressBar.Location = new System.Drawing.Point(12, 429);
+            this.MainProgressBar.Location = new System.Drawing.Point(12, 490);
             this.MainProgressBar.Name = "MainProgressBar";
             this.MainProgressBar.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.MainProgressBar.Size = new System.Drawing.Size(954, 33);
@@ -272,7 +285,7 @@
             // StatusLabel
             // 
             this.StatusLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.StatusLabel.Location = new System.Drawing.Point(12, 404);
+            this.StatusLabel.Location = new System.Drawing.Point(12, 465);
             this.StatusLabel.Name = "StatusLabel";
             this.StatusLabel.Size = new System.Drawing.Size(954, 22);
             this.StatusLabel.TabIndex = 0;
@@ -287,7 +300,7 @@
             this.ColumnsToRetainCheckedListBox.Location = new System.Drawing.Point(652, 34);
             this.ColumnsToRetainCheckedListBox.Name = "ColumnsToRetainCheckedListBox";
             this.ColumnsToRetainCheckedListBox.ScrollAlwaysVisible = true;
-            this.ColumnsToRetainCheckedListBox.Size = new System.Drawing.Size(302, 344);
+            this.ColumnsToRetainCheckedListBox.Size = new System.Drawing.Size(302, 412);
             this.ColumnsToRetainCheckedListBox.TabIndex = 200;
             // 
             // retainColsLabel
@@ -304,7 +317,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(978, 474);
+            this.ClientSize = new System.Drawing.Size(978, 533);
             this.Controls.Add(this.retainColsLabel);
             this.Controls.Add(this.ColumnsToRetainCheckedListBox);
             this.Controls.Add(this.StatusLabel);
@@ -352,6 +365,7 @@
         private System.Windows.Forms.TextBox RandomSeedTextBox;
         private System.Windows.Forms.CheckedListBox ColumnsToRetainCheckedListBox;
         private System.Windows.Forms.Label retainColsLabel;
+        private System.Windows.Forms.ComboBox SubsamplingModeComboBox;
     }
 }
 

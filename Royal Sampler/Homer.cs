@@ -19,8 +19,10 @@ namespace royalsampler
         /// This is an object that contains all of the file input details, including things like file encoding and delimiter characters.
         /// </summary>
         private FileDetails fileDetails;
-        public int numberOfSamples { get; set; }
-        public int rowsPerSample { get; set; }
+        public ulong numberOfSamples { get; set; }
+        public ulong rowsPerSample { get; set; }
+        public ulong startRow { get; set; }
+        public ulong endRow { get; set; }
         public bool allowReplacement { get; set; }
         public string randSeedString { get; set; }
         public HashSet<int> retainedIndices { get; set; }
@@ -45,7 +47,7 @@ namespace royalsampler
             this.fileDetails.totalNumberOfRows = 0;
             this.fileDetails.rowErrorCount = 0;
 
-            using (var stream = File.OpenRead(this.fileDetails.inputFileLocation))
+            using (var stream = new FileStream(this.GetInputFile(), FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             using (var reader = new StreamReader(stream, encoding: this.fileDetails.fileEncoding))
             {
                 if (fileDetails.containsHeader)
@@ -103,12 +105,12 @@ namespace royalsampler
         /// <summary>
         /// Retrieve the already-determined number of rows.
         /// </summary>
-        public int GetRowCount()
+        public ulong GetRowCount()
         {
             return this.fileDetails.totalNumberOfRows;
         }
 
-        public void SetRowCount(int nrow, int nerr)
+        public void SetRowCount(ulong nrow, int nerr)
         {
             this.fileDetails.totalNumberOfRows = nrow;
             this.fileDetails.rowErrorCount = nerr;
@@ -119,7 +121,7 @@ namespace royalsampler
             this.fileDetails.outputFolder = folderOut;
         }
 
-        public string GetOutputFolder()
+        public string GetOutputLocation()
         {
             return this.fileDetails.outputFolder;
         }
@@ -165,7 +167,7 @@ namespace royalsampler
     {
         internal string inputFileLocation { get; set; }
         internal string outputFolder { get; set; }
-        internal int totalNumberOfRows { get; set; }
+        internal ulong totalNumberOfRows { get; set; }
         internal int rowErrorCount { get; set; }
         internal char delimiter { get; set; }
         internal char quote { get; set; }
