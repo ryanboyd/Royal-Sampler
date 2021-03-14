@@ -14,6 +14,9 @@ namespace royalsampler
 {
     public partial class RoyalSamplerForm : Form
     {
+
+        static string versionNumber = "v1.0.0";
+
         public RoyalSamplerForm()
         {
             InitializeComponent();
@@ -48,6 +51,8 @@ namespace royalsampler
             {
                 EncodingComboBox.SelectedIndex = EncodingComboBox.FindStringExact(Encoding.Default.BodyName);
             }
+
+            this.Text = "Royal Sampler " + versionNumber;
 
             DelimiterTextBox.Text = ",";
             QuoteTextBox.Text = "\"";
@@ -267,7 +272,7 @@ namespace royalsampler
             }
             else if (selectedItemText == "Targeted Subsample")
             {
-                labelNumSubsamples.Text = "Start Sampling from Row #:";
+                labelNumSubsamples.Text = "Start Sampling at Row #:";
                 labelRowsPerSample.Text = "Stop Sampling at Row #:";
                 AllowReplacementsCheckbox.Enabled = false;
                 RandomSeedTextBox.Enabled = false;

@@ -19,7 +19,7 @@ namespace royalsampler
         private void backgroundWorker_SubSampleProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
         {
             //MainProgressBar.Value = e.ProgressPercentage;
-            StatusLabel.Text = "Writing subsamples... " + ((double)(e.ProgressPercentage / (double)100)).ToString(".00") + "% complete...";
+            StatusLabel.Text = "Fetching and Writing subsample(s)... " + ((double)(e.ProgressPercentage / (double)100)).ToString(".00") + "% complete...";
         }
 
         private void backgroundWorker_SubSampleRunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
