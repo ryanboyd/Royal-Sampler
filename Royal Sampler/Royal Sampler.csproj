@@ -11,16 +11,26 @@
     <DelaySign>false</DelaySign>
     <AssemblyOriginatorKeyFile>SectigoSignCert.pfx</AssemblyOriginatorKeyFile>
     <AssemblyName>RoyalSampler</AssemblyName>
+    <NoWin32Manifest>true</NoWin32Manifest>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <Authors>Ryan L. Boyd</Authors>
+    <Company />
+    <Product>Royal Sampler</Product>
+
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <PublishSingleFile>true</PublishSingleFile>
+    <SelfContained>true</SelfContained>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <PublishTrimmed>true</PublishTrimmed>
+    <PublishReadyToRun>true</PublishReadyToRun>
+    
+    
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
     <DocumentationFile></DocumentationFile>
   </PropertyGroup>
-
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="if $(ConfigurationName) == Release call &quot;$(ProjectDir)signBin.bat&quot;" />
-  </Target>
 
   <ItemGroup>
     <Compile Update="BGWorker - Targeted Subsample.cs">
