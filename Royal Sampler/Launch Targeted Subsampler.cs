@@ -17,18 +17,18 @@ namespace royalsampler
             ulong startRow = 0;
             ulong endRow = 0;
 
-            NumSubsamplesTextbox.Text = NumSubsamplesTextbox.Text.Trim();
-            RowsPerSampleTextbox.Text = RowsPerSampleTextbox.Text.Trim();
+            NumberOfFilesToCreateTextBox.Text = NumberOfFilesToCreateTextBox.Text.Trim();
+            NumberOfSamplesPerFileTextBox.Text = NumberOfSamplesPerFileTextBox.Text.Trim();
             RandomSeedTextBox.Text = RandomSeedTextBox.Text.Trim();
 
 
-            if (!ulong.TryParse(NumSubsamplesTextbox.Text, out startRow) || startRow < 1)
+            if (!ulong.TryParse(NumberOfFilesToCreateTextBox.Text, out startRow) || startRow < 1)
             {
                 MessageBox.Show("Your Starting Row # must be a positive integer.", "D'oh!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            if (!ulong.TryParse(RowsPerSampleTextbox.Text, out endRow) || endRow < 1)
+            if (!ulong.TryParse(NumberOfSamplesPerFileTextBox.Text, out endRow) || endRow < 1)
             {
                 MessageBox.Show("Your Ending Row Number must be a positive integer.", "D'oh!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;

@@ -45,11 +45,11 @@
             this.StartButton = new System.Windows.Forms.Button();
             this.labelRandSeed = new System.Windows.Forms.Label();
             this.RandomSeedTextBox = new System.Windows.Forms.TextBox();
-            this.labelRowsPerSample = new System.Windows.Forms.Label();
-            this.RowsPerSampleTextbox = new System.Windows.Forms.TextBox();
-            this.labelNumSubsamples = new System.Windows.Forms.Label();
+            this.labelNumberOfSamplesPerFile = new System.Windows.Forms.Label();
+            this.NumberOfSamplesPerFileTextBox = new System.Windows.Forms.TextBox();
+            this.labelNumberOfFilesToCreate = new System.Windows.Forms.Label();
             this.AllowReplacementsCheckbox = new System.Windows.Forms.CheckBox();
-            this.NumSubsamplesTextbox = new System.Windows.Forms.TextBox();
+            this.NumberOfFilesToCreateTextBox = new System.Windows.Forms.TextBox();
             this.MainProgressBar = new System.Windows.Forms.ProgressBar();
             this.StatusLabel = new System.Windows.Forms.Label();
             this.ColumnsToRetainCheckedListBox = new System.Windows.Forms.CheckedListBox();
@@ -175,11 +175,11 @@
             this.SubsamplingGroupBox.Controls.Add(this.StartButton);
             this.SubsamplingGroupBox.Controls.Add(this.labelRandSeed);
             this.SubsamplingGroupBox.Controls.Add(this.RandomSeedTextBox);
-            this.SubsamplingGroupBox.Controls.Add(this.labelRowsPerSample);
-            this.SubsamplingGroupBox.Controls.Add(this.RowsPerSampleTextbox);
-            this.SubsamplingGroupBox.Controls.Add(this.labelNumSubsamples);
+            this.SubsamplingGroupBox.Controls.Add(this.labelNumberOfSamplesPerFile);
+            this.SubsamplingGroupBox.Controls.Add(this.NumberOfSamplesPerFileTextBox);
+            this.SubsamplingGroupBox.Controls.Add(this.labelNumberOfFilesToCreate);
             this.SubsamplingGroupBox.Controls.Add(this.AllowReplacementsCheckbox);
-            this.SubsamplingGroupBox.Controls.Add(this.NumSubsamplesTextbox);
+            this.SubsamplingGroupBox.Controls.Add(this.NumberOfFilesToCreateTextBox);
             this.SubsamplingGroupBox.Font = new System.Drawing.Font("MS Reference Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.SubsamplingGroupBox.Location = new System.Drawing.Point(333, 12);
             this.SubsamplingGroupBox.Name = "SubsamplingGroupBox";
@@ -229,31 +229,31 @@
             // 
             // labelRowsPerSample
             // 
-            this.labelRowsPerSample.AutoSize = true;
-            this.labelRowsPerSample.Location = new System.Drawing.Point(13, 167);
-            this.labelRowsPerSample.Name = "labelRowsPerSample";
-            this.labelRowsPerSample.Size = new System.Drawing.Size(230, 19);
-            this.labelRowsPerSample.TabIndex = 0;
-            this.labelRowsPerSample.Text = "Number of Rows per Sample:";
+            this.labelNumberOfSamplesPerFile.AutoSize = true;
+            this.labelNumberOfSamplesPerFile.Location = new System.Drawing.Point(13, 167);
+            this.labelNumberOfSamplesPerFile.Name = "labelRowsPerSample";
+            this.labelNumberOfSamplesPerFile.Size = new System.Drawing.Size(174, 19);
+            this.labelNumberOfSamplesPerFile.TabIndex = 0;
+            this.labelNumberOfSamplesPerFile.Text = "# of Samples per File:";
             // 
             // RowsPerSampleTextbox
             // 
-            this.RowsPerSampleTextbox.Location = new System.Drawing.Point(13, 189);
-            this.RowsPerSampleTextbox.Name = "RowsPerSampleTextbox";
-            this.RowsPerSampleTextbox.Size = new System.Drawing.Size(265, 26);
-            this.RowsPerSampleTextbox.TabIndex = 101;
-            this.RowsPerSampleTextbox.Text = "100000";
-            this.RowsPerSampleTextbox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.RowsPerSampleTextbox.Enter += new System.EventHandler(this.NumRowsPerSampleTextbox_Enter);
+            this.NumberOfSamplesPerFileTextBox.Location = new System.Drawing.Point(13, 189);
+            this.NumberOfSamplesPerFileTextBox.Name = "RowsPerSampleTextbox";
+            this.NumberOfSamplesPerFileTextBox.Size = new System.Drawing.Size(265, 26);
+            this.NumberOfSamplesPerFileTextBox.TabIndex = 101;
+            this.NumberOfSamplesPerFileTextBox.Text = "100000";
+            this.NumberOfSamplesPerFileTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.NumberOfSamplesPerFileTextBox.Enter += new System.EventHandler(this.NumRowsPerSampleTextbox_Enter);
             // 
             // labelNumSubsamples
             // 
-            this.labelNumSubsamples.AutoSize = true;
-            this.labelNumSubsamples.Location = new System.Drawing.Point(13, 91);
-            this.labelNumSubsamples.Name = "labelNumSubsamples";
-            this.labelNumSubsamples.Size = new System.Drawing.Size(254, 19);
-            this.labelNumSubsamples.TabIndex = 0;
-            this.labelNumSubsamples.Text = "Number of Subsamples to Draw:";
+            this.labelNumberOfFilesToCreate.AutoSize = true;
+            this.labelNumberOfFilesToCreate.Location = new System.Drawing.Point(13, 91);
+            this.labelNumberOfFilesToCreate.Name = "labelNumSubsamples";
+            this.labelNumberOfFilesToCreate.Size = new System.Drawing.Size(247, 19);
+            this.labelNumberOfFilesToCreate.TabIndex = 0;
+            this.labelNumberOfFilesToCreate.Text = "# of Subsample Files to Create:";
             // 
             // AllowReplacementsCheckbox
             // 
@@ -268,13 +268,13 @@
             // 
             // NumSubsamplesTextbox
             // 
-            this.NumSubsamplesTextbox.Location = new System.Drawing.Point(13, 113);
-            this.NumSubsamplesTextbox.Name = "NumSubsamplesTextbox";
-            this.NumSubsamplesTextbox.Size = new System.Drawing.Size(265, 26);
-            this.NumSubsamplesTextbox.TabIndex = 100;
-            this.NumSubsamplesTextbox.Text = "1000";
-            this.NumSubsamplesTextbox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.NumSubsamplesTextbox.Enter += new System.EventHandler(this.NumSubsamplesTextbox_Enter);
+            this.NumberOfFilesToCreateTextBox.Location = new System.Drawing.Point(13, 113);
+            this.NumberOfFilesToCreateTextBox.Name = "NumSubsamplesTextbox";
+            this.NumberOfFilesToCreateTextBox.Size = new System.Drawing.Size(265, 26);
+            this.NumberOfFilesToCreateTextBox.TabIndex = 100;
+            this.NumberOfFilesToCreateTextBox.Text = "1000";
+            this.NumberOfFilesToCreateTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.NumberOfFilesToCreateTextBox.Enter += new System.EventHandler(this.NumSubsamplesTextbox_Enter);
             // 
             // MainProgressBar
             // 
@@ -359,10 +359,10 @@
         private System.Windows.Forms.CheckBox AllowReplacementsCheckbox;
         private System.Windows.Forms.ProgressBar MainProgressBar;
         private System.Windows.Forms.Label StatusLabel;
-        private System.Windows.Forms.Label labelRowsPerSample;
-        private System.Windows.Forms.TextBox RowsPerSampleTextbox;
-        private System.Windows.Forms.Label labelNumSubsamples;
-        private System.Windows.Forms.TextBox NumSubsamplesTextbox;
+        private System.Windows.Forms.Label labelNumberOfSamplesPerFile;
+        private System.Windows.Forms.TextBox NumberOfSamplesPerFileTextBox;
+        private System.Windows.Forms.Label labelNumberOfFilesToCreate;
+        private System.Windows.Forms.TextBox NumberOfFilesToCreateTextBox;
         private System.Windows.Forms.Button StartButton;
         private System.Windows.Forms.Label labelRandSeed;
         private System.Windows.Forms.TextBox RandomSeedTextBox;

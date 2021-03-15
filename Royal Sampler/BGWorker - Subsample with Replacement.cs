@@ -11,7 +11,10 @@ namespace royalsampler
     {
 
 
-
+        private static string genericProcessingError = "There was an error creating your output file. There are 3 common causes of this error:" + Environment.NewLine +
+                                                        "1) Your input or output files are open in another application" + Environment.NewLine +
+                                                        "2) Your CSV file has an error and cannot be properly parsed" + Environment.NewLine +
+                                                        "3) Your CSV settings in this application do not match your file" + Environment.NewLine;
 
         private void backgroundWorker_SubSampleWithReplacement(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
@@ -162,7 +165,7 @@ namespace royalsampler
                 }
                 catch
                 {
-                    MessageBox.Show("There was an error in writing your output file(s). This often occurs when your output file is already open in another application.", "D'oh!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(genericProcessingError, "D'oh!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     e.Result = "Cancelled";
                     return;
                 }

@@ -52,10 +52,10 @@ namespace royalsampler
             DelimiterTextBox.Text = ",";
             QuoteTextBox.Text = "\"";
             ContainsHeaderCheckbox.Checked = true;
-            NumSubsamplesTextbox.Text = "5";
-            NumSubsamplesTextbox.MaxLength = 10;
-            RowsPerSampleTextbox.Text = "";
-            RowsPerSampleTextbox.MaxLength = 10;
+            NumberOfFilesToCreateTextBox.Text = "5";
+            NumberOfFilesToCreateTextBox.MaxLength = 10;
+            NumberOfSamplesPerFileTextBox.Text = "";
+            NumberOfSamplesPerFileTextBox.MaxLength = 10;
             InputFileTextbox.Select();
 
             InputFileTextbox.Enabled = false;
@@ -149,8 +149,8 @@ namespace royalsampler
             QuoteTextBox.Enabled = false;
             ContainsHeaderCheckbox.Enabled = false;
             OpenFileButton.Enabled = false;
-            NumSubsamplesTextbox.Enabled = false;
-            RowsPerSampleTextbox.Enabled = false;
+            NumberOfFilesToCreateTextBox.Enabled = false;
+            NumberOfSamplesPerFileTextBox.Enabled = false;
             RandomSeedTextBox.Enabled = false;
             ColumnsToRetainCheckedListBox.Enabled = false;
             SubsamplingModeComboBox.Enabled = false;
@@ -166,8 +166,8 @@ namespace royalsampler
             QuoteTextBox.Enabled = true;
             ContainsHeaderCheckbox.Enabled = true;
             OpenFileButton.Enabled = true;
-            NumSubsamplesTextbox.Enabled = true;
-            RowsPerSampleTextbox.Enabled = true;
+            NumberOfFilesToCreateTextBox.Enabled = true;
+            NumberOfSamplesPerFileTextBox.Enabled = true;
             
             ColumnsToRetainCheckedListBox.Enabled = true;
             SubsamplingModeComboBox.Enabled = true;
@@ -268,27 +268,27 @@ namespace royalsampler
 
             if (selectedItemText == "Randomized Subsampling")
             {
-                labelNumSubsamples.Text = "Number of Subsamples to Draw:";
-                labelRowsPerSample.Text = "Number of Rows per Sample";
-                NumSubsamplesTextbox.Text = "1000";
-                RowsPerSampleTextbox.Text = "100000";
+                labelNumberOfFilesToCreate.Text = "# of Subsample Files to Create:";
+                labelNumberOfSamplesPerFile.Text = "# of Samples per File:";
+                NumberOfFilesToCreateTextBox.Text = "1";
+                NumberOfSamplesPerFileTextBox.Text = "100000";
                 AllowReplacementsCheckbox.Enabled = true;
                 RandomSeedTextBox.Enabled = true;
             }
             else if (selectedItemText == "Sample by Range")
             {
-                labelNumSubsamples.Text = "Start Sampling at Row #:";
-                labelRowsPerSample.Text = "Stop Sampling at Row #:";
+                labelNumberOfFilesToCreate.Text = "Start Sampling at Row #:";
+                labelNumberOfSamplesPerFile.Text = "Stop Sampling at Row #:";
 
-                NumSubsamplesTextbox.Text = "1";
+                NumberOfFilesToCreateTextBox.Text = "1";
                 
                 if (!String.IsNullOrEmpty(InputFileTextbox.Text))
                 {
-                    RowsPerSampleTextbox.Text = hoju.GetRowCount().ToString();
+                    NumberOfSamplesPerFileTextBox.Text = hoju.GetRowCount().ToString();
                 }
                 else
                 {
-                    RowsPerSampleTextbox.Text = "10000";
+                    NumberOfSamplesPerFileTextBox.Text = "10000";
                 }
                     
 
@@ -298,11 +298,11 @@ namespace royalsampler
             }
             else if (selectedItemText == "Split File into Chunks")
             {
-                labelNumSubsamples.Text = "Split into N files:";
-                labelRowsPerSample.Text = "Split with N rows per file:";
+                labelNumberOfFilesToCreate.Text = "Split into N files:";
+                labelNumberOfSamplesPerFile.Text = "Split with N rows per file:";
 
-                NumSubsamplesTextbox.Text = "5";
-                RowsPerSampleTextbox.Text = "";
+                NumberOfFilesToCreateTextBox.Text = "5";
+                NumberOfSamplesPerFileTextBox.Text = "";
 
                 AllowReplacementsCheckbox.Enabled = false;
                 RandomSeedTextBox.Enabled = false;
@@ -317,7 +317,7 @@ namespace royalsampler
             string selectedItemText = SubsamplingModeComboBox.GetItemText(SubsamplingModeComboBox.SelectedItem);
             if (selectedItemText == "Split File into Chunks")
             {
-                RowsPerSampleTextbox.Text = "";
+                NumberOfSamplesPerFileTextBox.Text = "";
             }
 
         }
@@ -327,7 +327,7 @@ namespace royalsampler
             string selectedItemText = SubsamplingModeComboBox.GetItemText(SubsamplingModeComboBox.SelectedItem);
             if (selectedItemText == "Split File into Chunks")
             {
-                NumSubsamplesTextbox.Text = "";
+                NumberOfFilesToCreateTextBox.Text = "";
             }
         }
 

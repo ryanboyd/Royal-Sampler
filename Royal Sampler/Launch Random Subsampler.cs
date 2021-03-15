@@ -18,18 +18,18 @@ namespace royalsampler
             int numRowsPerSample = 0;
             int randomSeed = 0;
 
-            NumSubsamplesTextbox.Text = NumSubsamplesTextbox.Text.Trim();
-            RowsPerSampleTextbox.Text = RowsPerSampleTextbox.Text.Trim();
+            NumberOfFilesToCreateTextBox.Text = NumberOfFilesToCreateTextBox.Text.Trim();
+            NumberOfSamplesPerFileTextBox.Text = NumberOfSamplesPerFileTextBox.Text.Trim();
             RandomSeedTextBox.Text = RandomSeedTextBox.Text.Trim();
 
 
-            if (!int.TryParse(NumSubsamplesTextbox.Text, out numSamples) || numSamples < 1)
+            if (!int.TryParse(NumberOfFilesToCreateTextBox.Text, out numSamples) || numSamples < 1)
             {
                 MessageBox.Show("Your \"Number of Subsamples\" must be a positive integer.", "D'oh!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            if (!int.TryParse(RowsPerSampleTextbox.Text, out numRowsPerSample) || numRowsPerSample < 1)
+            if (!int.TryParse(NumberOfSamplesPerFileTextBox.Text, out numRowsPerSample) || numRowsPerSample < 1)
             {
                 MessageBox.Show("Your \"Number of Rows per Sample\" must be a positive integer.", "D'oh!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -86,8 +86,8 @@ namespace royalsampler
                 }
 
                 hoju.SetOutputFolder(folderBrowser.SelectedPath);
-                hoju.numberOfSamples = ulong.Parse(NumSubsamplesTextbox.Text);
-                hoju.rowsPerSample = ulong.Parse(RowsPerSampleTextbox.Text);
+                hoju.numberOfSamples = ulong.Parse(NumberOfFilesToCreateTextBox.Text);
+                hoju.rowsPerSample = ulong.Parse(NumberOfSamplesPerFileTextBox.Text);
                 hoju.allowReplacement = AllowReplacementsCheckbox.Checked;
                 hoju.randSeedString = RandomSeedTextBox.Text;
                 hoju.retainedIndices = new HashSet<int>();

@@ -170,7 +170,7 @@ namespace royalsampler
                 }
                 catch
                 {
-                    MessageBox.Show("There was an error in writing your output file. This often occurs when your output file is already open in another application.", "D'oh!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(genericProcessingError, "D'oh!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     e.Result = "Cancelled";
                     return;
                 }

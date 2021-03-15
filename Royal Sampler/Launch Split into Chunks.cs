@@ -17,21 +17,21 @@ namespace royalsampler
             ulong numFileParameter = 0;
             ulong numRowParameter = 0;
 
-            NumSubsamplesTextbox.Text = NumSubsamplesTextbox.Text.Trim();
-            RowsPerSampleTextbox.Text = RowsPerSampleTextbox.Text.Trim();
+            NumberOfFilesToCreateTextBox.Text = NumberOfFilesToCreateTextBox.Text.Trim();
+            NumberOfSamplesPerFileTextBox.Text = NumberOfSamplesPerFileTextBox.Text.Trim();
             RandomSeedTextBox.Text = RandomSeedTextBox.Text.Trim();
 
             string segmentationStrategy = "";
 
-            if (String.IsNullOrEmpty(RowsPerSampleTextbox.Text) && String.IsNullOrEmpty(NumSubsamplesTextbox.Text))
+            if (String.IsNullOrEmpty(NumberOfSamplesPerFileTextBox.Text) && String.IsNullOrEmpty(NumberOfFilesToCreateTextBox.Text))
             {
                 MessageBox.Show("You must choose to segment your file either by the number of rows or by the number of files that you would like to split it into. Please input a number into the corresponding box before proceeding.", "D'oh!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            if (!String.IsNullOrEmpty(NumSubsamplesTextbox.Text))
+            if (!String.IsNullOrEmpty(NumberOfFilesToCreateTextBox.Text))
             {
-                if (!ulong.TryParse(NumSubsamplesTextbox.Text, out numFileParameter) || numFileParameter < 1)
+                if (!ulong.TryParse(NumberOfFilesToCreateTextBox.Text, out numFileParameter) || numFileParameter < 1)
                 {
                     MessageBox.Show("Your segmentation option must be a positive integer.", "D'oh!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
@@ -40,9 +40,9 @@ namespace royalsampler
 
             }
 
-            if (!String.IsNullOrEmpty(RowsPerSampleTextbox.Text))
+            if (!String.IsNullOrEmpty(NumberOfSamplesPerFileTextBox.Text))
             {
-                if (!ulong.TryParse(RowsPerSampleTextbox.Text, out numRowParameter) || numRowParameter < 1)
+                if (!ulong.TryParse(NumberOfSamplesPerFileTextBox.Text, out numRowParameter) || numRowParameter < 1)
                 {
                     MessageBox.Show("Your segmentation option must be a positive integer.", "D'oh!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
