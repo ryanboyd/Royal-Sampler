@@ -23,7 +23,7 @@
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <PublishTrimmed>true</PublishTrimmed>
     <PublishReadyToRun>true</PublishReadyToRun>
-    <Version>1.1.0</Version>
+    <Version>1.1.1</Version>
     <PackageId>Royal Sampler</PackageId>
     <PackageProjectUrl>https://www.ryanboyd.io</PackageProjectUrl>
     <RepositoryUrl>https://github.com/ryanboyd/Royal-Sampler</RepositoryUrl>
