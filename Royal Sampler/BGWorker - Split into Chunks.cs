@@ -86,6 +86,17 @@ namespace royalsampler
                             {
                                 int pctDone = (int)Math.Round((((double)rowsWrittenTotal / homer.GetRowCount()) * 10000), 0, MidpointRounding.AwayFromZero);
                                 (sender as BackgroundWorker).ReportProgress(pctDone);
+
+                                if ((sender as BackgroundWorker).CancellationPending)
+                                {
+                                    streamWriter.Close();
+                                    streamWriter.Dispose();
+                                    fileStreamOut.Close();
+                                    fileStreamOut.Dispose();
+                                    e.Result = "Cancelled";
+                                    break;
+                                }
+
                             }
 
                            
@@ -164,6 +175,19 @@ namespace royalsampler
                             {
                                 int pctDone = (int)Math.Round((((double)rowsWrittenTotal / homer.GetRowCount()) * 10000), 0, MidpointRounding.AwayFromZero);
                                 (sender as BackgroundWorker).ReportProgress(pctDone);
+
+
+                                if ((sender as BackgroundWorker).CancellationPending)
+                                {
+                                    streamWriter.Close();
+                                    streamWriter.Dispose();
+                                    fileStreamOut.Close();
+                                    fileStreamOut.Dispose();
+                                    e.Result = "Cancelled";
+                                    break;
+                                }
+
+
                             }
                         }
 
