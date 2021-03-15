@@ -9,7 +9,7 @@ namespace royalsampler
     public partial class RoyalSamplerForm : Form
     {
 
-        static string versionNumber = "v1.1.0, by Ryan L. Boyd";
+        
 
         public RoyalSamplerForm()
         {
@@ -27,7 +27,7 @@ namespace royalsampler
             DisableProgBar();
 
             SubsamplingModeComboBox.Items.Add("Split File into Chunks");
-            SubsamplingModeComboBox.Items.Add("Targeted Subsample");
+            SubsamplingModeComboBox.Items.Add("Sample by Range");
             SubsamplingModeComboBox.Items.Add("Randomized Subsampling");
             
             SubsamplingModeComboBox.SelectedItem = "Split File into Chunks";
@@ -47,7 +47,7 @@ namespace royalsampler
                 EncodingComboBox.SelectedIndex = EncodingComboBox.FindStringExact(Encoding.Default.BodyName);
             }
 
-            this.Text = "Royal Sampler " + versionNumber;
+            this.Text = "Royal Sampler v" + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString() + ", by Ryan L. Boyd";
 
             DelimiterTextBox.Text = ",";
             QuoteTextBox.Text = "\"";
@@ -178,7 +178,7 @@ namespace royalsampler
                 AllowReplacementsCheckbox.Enabled = true;
                 RandomSeedTextBox.Enabled = true;
             }
-            else if (SubsamplingModeComboBox.GetItemText(SubsamplingModeComboBox.SelectedItem) == "Targeted Subsample")
+            else if (SubsamplingModeComboBox.GetItemText(SubsamplingModeComboBox.SelectedItem) == "Sample by Range")
             {
                 AllowReplacementsCheckbox.Enabled = false;
                 RandomSeedTextBox.Enabled = false;
@@ -249,7 +249,7 @@ namespace royalsampler
                 {
                     LaunchRandomSubsampler();
                 }
-                else if (selectedItemText == "Targeted Subsample")
+                else if (selectedItemText == "Sample by Range")
                 {
                     LaunchTargetedSubsampler();
                 }
@@ -275,7 +275,7 @@ namespace royalsampler
                 AllowReplacementsCheckbox.Enabled = true;
                 RandomSeedTextBox.Enabled = true;
             }
-            else if (selectedItemText == "Targeted Subsample")
+            else if (selectedItemText == "Sample by Range")
             {
                 labelNumSubsamples.Text = "Start Sampling at Row #:";
                 labelRowsPerSample.Text = "Stop Sampling at Row #:";
@@ -328,6 +328,14 @@ namespace royalsampler
             if (selectedItemText == "Split File into Chunks")
             {
                 NumSubsamplesTextbox.Text = "";
+            }
+        }
+
+        private void AllowReplacementsCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!AllowReplacementsCheckbox.Checked)
+            {
+                MessageBox.Show("Note that subsampling *without* replacement is not very efficient in its current form. This option will not work properly with datasets that contain > 2 billion rows of data.", "Ruh Roh!", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
     }

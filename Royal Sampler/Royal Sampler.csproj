@@ -41,13 +41,13 @@
     <Compile Update="BGWorker - Split into Chunks.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="BGWorker - Targeted Subsample.cs">
+    <Compile Update="BGWorker - Sample by Range.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Launch Split into Chunks.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Launch Targeted Subsampler.cs">
+    <Compile Update="Launch Sample by Ranger.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Properties\Resources.Designer.cs">

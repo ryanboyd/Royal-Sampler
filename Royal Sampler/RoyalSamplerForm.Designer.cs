@@ -264,6 +264,7 @@
             this.AllowReplacementsCheckbox.TabIndex = 102;
             this.AllowReplacementsCheckbox.Text = "Subsample with Replacement";
             this.AllowReplacementsCheckbox.UseVisualStyleBackColor = true;
+            this.AllowReplacementsCheckbox.CheckedChanged += new System.EventHandler(this.AllowReplacementsCheckbox_CheckedChanged);
             // 
             // NumSubsamplesTextbox
             // 
