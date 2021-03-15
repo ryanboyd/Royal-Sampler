@@ -227,30 +227,30 @@
             this.RandomSeedTextBox.TabIndex = 103;
             this.RandomSeedTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
-            // labelRowsPerSample
+            // labelNumberOfSamplesPerFile
             // 
             this.labelNumberOfSamplesPerFile.AutoSize = true;
             this.labelNumberOfSamplesPerFile.Location = new System.Drawing.Point(13, 167);
-            this.labelNumberOfSamplesPerFile.Name = "labelRowsPerSample";
+            this.labelNumberOfSamplesPerFile.Name = "labelNumberOfSamplesPerFile";
             this.labelNumberOfSamplesPerFile.Size = new System.Drawing.Size(174, 19);
             this.labelNumberOfSamplesPerFile.TabIndex = 0;
             this.labelNumberOfSamplesPerFile.Text = "# of Samples per File:";
             // 
-            // RowsPerSampleTextbox
+            // NumberOfSamplesPerFileTextBox
             // 
             this.NumberOfSamplesPerFileTextBox.Location = new System.Drawing.Point(13, 189);
-            this.NumberOfSamplesPerFileTextBox.Name = "RowsPerSampleTextbox";
+            this.NumberOfSamplesPerFileTextBox.Name = "NumberOfSamplesPerFileTextBox";
             this.NumberOfSamplesPerFileTextBox.Size = new System.Drawing.Size(265, 26);
             this.NumberOfSamplesPerFileTextBox.TabIndex = 101;
             this.NumberOfSamplesPerFileTextBox.Text = "100000";
             this.NumberOfSamplesPerFileTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.NumberOfSamplesPerFileTextBox.Enter += new System.EventHandler(this.NumRowsPerSampleTextbox_Enter);
             // 
-            // labelNumSubsamples
+            // labelNumberOfFilesToCreate
             // 
             this.labelNumberOfFilesToCreate.AutoSize = true;
             this.labelNumberOfFilesToCreate.Location = new System.Drawing.Point(13, 91);
-            this.labelNumberOfFilesToCreate.Name = "labelNumSubsamples";
+            this.labelNumberOfFilesToCreate.Name = "labelNumberOfFilesToCreate";
             this.labelNumberOfFilesToCreate.Size = new System.Drawing.Size(247, 19);
             this.labelNumberOfFilesToCreate.TabIndex = 0;
             this.labelNumberOfFilesToCreate.Text = "# of Subsample Files to Create:";
@@ -266,10 +266,10 @@
             this.AllowReplacementsCheckbox.UseVisualStyleBackColor = true;
             this.AllowReplacementsCheckbox.CheckedChanged += new System.EventHandler(this.AllowReplacementsCheckbox_CheckedChanged);
             // 
-            // NumSubsamplesTextbox
+            // NumberOfFilesToCreateTextBox
             // 
             this.NumberOfFilesToCreateTextBox.Location = new System.Drawing.Point(13, 113);
-            this.NumberOfFilesToCreateTextBox.Name = "NumSubsamplesTextbox";
+            this.NumberOfFilesToCreateTextBox.Name = "NumberOfFilesToCreateTextBox";
             this.NumberOfFilesToCreateTextBox.Size = new System.Drawing.Size(265, 26);
             this.NumberOfFilesToCreateTextBox.TabIndex = 100;
             this.NumberOfFilesToCreateTextBox.Text = "1000";
@@ -329,6 +329,7 @@
             this.Controls.Add(this.groupBox1);
             this.DoubleBuffered = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.Name = "RoyalSamplerForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Royal Sampler";
