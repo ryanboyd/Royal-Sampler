@@ -351,5 +351,7 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+
+# Sign and Installer Building scripts
 Royal Sampler/_signBin and Install.bat
 Royal Sampler/_Royal Sampler Installer.iss
