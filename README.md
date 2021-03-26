@@ -9,3 +9,4 @@ There are a bunch of settings in the application that are — I think — fairly
 ## CSV File Format Settings
 There are several different formats for CSV files, and the structure of your CSV files may depend on your computer or the region of the world that your computer comes from. For example, despite the fact that the "C" in "CSV" stands for "Comma," it is not uncommon to find datasets that use semicolons instead (see ["Comma-separated values"](https://en.wikipedia.org/wiki/Comma-separated_values)).
 
+![CSV Settings](https://github.com/ryanboyd/Royal-Sampler/blob/main/readme%20miscellany/csv_settings.png)
