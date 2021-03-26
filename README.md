@@ -12,3 +12,15 @@ There are several different formats for CSV files, and the structure of your CSV
 ![CSV Settings](https://github.com/ryanboyd/Royal-Sampler/blob/main/readme%20miscellany/csv_settings.png)
 
 After choosing your file, the application will read through the entire dataset to make sure that there are no errors during processing, as well as learn some other pieces of information about your file that it will later use to help subsample your dataset (such as how many rows it has and the names of each column).
+
+## Subsampling Settings
+
+*Royal Sampler* can create subsamples of your dataset in three different ways:
+
+1) Splitting your file into separate, equal-sized sections;
+2) Retrieving a portion of your file (for example, rows 100 through 500);
+3) Building randomized subsamples of your dataset
+
+First, you will want to select which method of subsampling you would like to accomplish. Once you have selected the appropriate mode, you will see the other options below change to suit the subsampling type.
+
+![CSV Settings](https://github.com/ryanboyd/Royal-Sampler/blob/main/readme%20miscellany/subsampling_mode_settings.png)
