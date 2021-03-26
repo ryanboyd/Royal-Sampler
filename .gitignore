@@ -353,5 +353,5 @@ MigrationBackup/
 .ionide/
 
 # Sign and Installer Building scripts
-Royal Sampler/_signBin and Install.bat
+Royal Sampler/_signBin and Install and ZIP.bat
 Royal Sampler/_Royal Sampler Installer.iss
