@@ -28,17 +28,19 @@ namespace royalsampler
             string escapedQuoteString = homer.GetQuote().ToString() + homer.GetQuote().ToString();
             int numCols = homer.retainedIndices.Count;
 
+
             for (ulong sampleNumber = 0; sampleNumber < homer.numberOfSamples; sampleNumber++)
             {
 
+                //break out of this method if the user cancels from the form
                 if ((sender as BackgroundWorker).CancellationPending)
                 {
                     e.Result = "Cancelled";
                     break;
                 }
 
-                //report progress
-                //MessageBox.Show((((double)sampleNumber / homer.numberOfSamples) * 100).ToString());
+                
+                //report our progress
                 int pctDone = (int)Math.Round((((double)sampleNumber / homer.numberOfSamples) * 10000), 0, MidpointRounding.AwayFromZero);
                 (sender as BackgroundWorker).ReportProgress(pctDone);
 

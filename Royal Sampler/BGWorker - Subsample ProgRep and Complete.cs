@@ -26,7 +26,7 @@ namespace royalsampler
 
             if (e.Result != "Cancelled")
             {
-                MessageBox.Show("Your file has successfully subsampled. Hooray!" + " rows.", "Woohoo!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Your file has successfully been subsampled. Hooray!", "Woohoo!", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
             {

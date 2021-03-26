@@ -23,11 +23,12 @@
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <PublishTrimmed>true</PublishTrimmed>
     <PublishReadyToRun>true</PublishReadyToRun>
-    <Version>1.1.3</Version>
+    <Version>1.1.4</Version>
     <PackageId>Royal Sampler</PackageId>
     <PackageProjectUrl>https://www.ryanboyd.io</PackageProjectUrl>
     <RepositoryUrl>https://github.com/ryanboyd/Royal-Sampler</RepositoryUrl>
     <Description>Create subsamples of a CSV file</Description>
+    <AssemblyVersion>1.1.4.0</AssemblyVersion>
     
     
   </PropertyGroup>
