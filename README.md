@@ -45,10 +45,19 @@ This is pretty much exactly what it sounds like. If the setting above determines
 
 For all of the bootstrapping nerds our there, you'll already know what this means. For everyone else: subsampling with replacement means that each row in your original dataset can be selected for subsampling an unlimited number of times. Let's say that you have a CSV file with 5 rows of data in it, something that looks like this:
 
-|Name	|Age	|Gender	|Friends	|Pets	|
+|Name	|Age	|Gender	|# of Friends	|Has Pets?	|
 |---	|---	|---	|---	|---	|
 |Ryan	|100	|M	|4	|0	|
 |Natalie	|39	|F	|1000	|0	|
 |Olenka	|25	|F	|1354	|1	|
 |Tabea	|25	|F	|1374	|1	|
 |Andrea	|25	|F	|9000	|1	|
+
+...and let's say that you want to "oversample" this file by creating a new dataset with 10000 rows. "Sampling with Replacement" means that this is possible, because every row of the dataset can be drawn into your new sample an infinite number of times.
+
+If you *disable* this option, however, it is impossible to oversample. Each time you draw a row from the original dataset into a new sample, it "disappears" from the original sample and cannot be selected again. If you want to split your original sample into *X* number of subsamples, but you *do not* want duplicate entries, then you will want to disable this option.
+
+### Randomization Seed
+You may want to randomly subsample your original dataset, but in a replicable way. By entering a ["seed"](https://en.wikipedia.org/wiki/Random_seed) value here, you can ensure that the randomization will occur in the same way every time you process a given dataset.
+
+Your seed value can be any integer between -2,147,483,648 and 2,147,483,647.

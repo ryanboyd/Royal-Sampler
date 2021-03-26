@@ -125,7 +125,15 @@ namespace royalsampler
                                     {
                                         rowNumber++;
                                         //calculate how far long we are
-                                        if (rowNumber % 1000 == 0) pctDone = calcPctDone(rowsWritten, homer.rowsPerSample, sampleNumber, homer.numberOfSamples);
+                                        if (rowNumber % 1000 == 0)
+                                        {
+                                            pctDone = calcPctDone(rowsWritten, homer.rowsPerSample, sampleNumber, homer.numberOfSamples);
+                                            if ((sender as BackgroundWorker).CancellationPending)
+                                            {
+                                                e.Result = "Cancelled";
+                                                break;
+                                            }
+                                        }
 
                                         if (rowsToSample.ContainsKey(rowNumber))
                                         {
@@ -155,7 +163,15 @@ namespace royalsampler
                                     {
                                         rowNumber++;
                                         //calculate how far long we are
-                                        if (rowNumber % 1000 == 0) pctDone = calcPctDone(rowsWritten, homer.rowsPerSample, sampleNumber, homer.numberOfSamples);
+                                        if (rowNumber % 1000 == 0)
+                                        {
+                                            pctDone = calcPctDone(rowsWritten, homer.rowsPerSample, sampleNumber, homer.numberOfSamples);
+                                            if ((sender as BackgroundWorker).CancellationPending)
+                                            {
+                                                e.Result = "Cancelled";
+                                                break;
+                                            }
+                                        }
 
                                         if (rowsToSample.ContainsKey(rowNumber))
                                         {
