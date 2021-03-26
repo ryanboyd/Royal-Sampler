@@ -269,7 +269,7 @@ namespace royalsampler
             if (selectedItemText == "Randomized Subsampling")
             {
                 labelNumberOfFilesToCreate.Text = "# of Subsample Files to Create:";
-                labelNumberOfSamplesPerFile.Text = "# of Samples per File:";
+                labelNumberOfSamplesPerFile.Text = "# of Rows per File:";
                 NumberOfFilesToCreateTextBox.Text = "1";
                 NumberOfSamplesPerFileTextBox.Text = "100000";
                 AllowReplacementsCheckbox.Enabled = true;

@@ -23,8 +23,32 @@ After choosing your file, the application will read through the entire dataset t
 
 First, you will want to select which method of subsampling you would like to accomplish. Once you have selected the appropriate mode, you will see the other options below change to suit the subsampling type.
 
-![CSV Settings](https://github.com/ryanboyd/Royal-Sampler/blob/main/readme%20miscellany/subsampling_mode_settings.png)
+![Subsampling Mode](https://github.com/ryanboyd/Royal-Sampler/blob/main/readme%20miscellany/subsampling_mode_settings.png)
 
 The settings for #1 and #2 above are fairly straight-forward, so I will only provide additional details on the settings for #3 at the moment. (This is a very fancy way of saying that I don't have enough time to write additional instructions at the moment!)
 
 ### # of Subsample Files to Create
+
+How many unique files would you like to generate for your subsamples? For example, if I want to create 50 subsamples of a really big dataset, each with 100,000 rows, then I would set the value for this setting to 50
+
+![Number of Samples 50x100k](https://github.com/ryanboyd/Royal-Sampler/blob/main/readme%20miscellany/subsampling_50x100k.png)
+
+However, if you don't *need* these to be split up into separate files and just want 5,000,000 rows of randomly subsampled data, you can just set this to "1" and use the subsequent setting to get all of the rows in the same file, e.g.,
+
+![Number of Samples 1x5M](https://github.com/ryanboyd/Royal-Sampler/blob/main/readme%20miscellany/subsampling_1x5M.png)
+
+### # of Rows per File
+
+This is pretty much exactly what it sounds like. If the setting above determines the number of "samples" that you want to generate (i.e., separate files), this setting determines how many rows will be included in each file.
+
+### Subsample with Replacement
+
+For all of the bootstrapping nerds our there, you'll already know what this means. For everyone else: subsampling with replacement means that each row in your original dataset can be selected for subsampling an unlimited number of times. Let's say that you have a CSV file with 5 rows of data in it, something that looks like this:
+
+|Name	|Age	|Gender	|Friends	|Pets	|
+|---	|---	|---	|---	|---	|
+|Ryan	|100	|M	|4	|0	|
+|Natalie	|39	|F	|1000	|0	|
+|Olenka	|25	|F	|1354	|1	|
+|Tabea	|25	|F	|1374	|1	|
+|Andrea	|25	|F	|9000	|1	|
