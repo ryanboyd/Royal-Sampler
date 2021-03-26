@@ -19,8 +19,12 @@ After choosing your file, the application will read through the entire dataset t
 
 1) Splitting your file into separate, equal-sized sections;
 2) Retrieving a portion of your file (for example, rows 100 through 500);
-3) Building randomized subsamples of your dataset
+3) Building randomized subsamples of your dataset.
 
 First, you will want to select which method of subsampling you would like to accomplish. Once you have selected the appropriate mode, you will see the other options below change to suit the subsampling type.
 
 ![CSV Settings](https://github.com/ryanboyd/Royal-Sampler/blob/main/readme%20miscellany/subsampling_mode_settings.png)
+
+The settings for #1 and #2 above are fairly straight-forward, so I will only provide additional details on the settings for #3 at the moment. (This is a very fancy way of saying that I don't have enough time to write additional instructions at the moment!)
+
+### # of Subsample Files to Create
