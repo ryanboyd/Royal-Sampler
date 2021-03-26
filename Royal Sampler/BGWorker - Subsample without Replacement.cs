@@ -24,6 +24,7 @@ namespace royalsampler
             string quoteString = homer.GetQuote().ToString();
             string escapedQuoteString = homer.GetQuote().ToString() + homer.GetQuote().ToString();
             int numCols = homer.retainedIndices.Count;
+            int pctDone = 0;
 
 
             ulong actualSamplesToBeWritten;
@@ -51,131 +52,143 @@ namespace royalsampler
 
 
 
-
-
-            for (ulong sampleNumber = 0; sampleNumber < homer.numberOfSamples; sampleNumber++)
+            //this is our outermost block within the bgworker: the timer that we use to report progress
+            TimeSpan reportPeriod = TimeSpan.FromMinutes(0.01);
+            using (new System.Threading.Timer(
+                           _ => (sender as BackgroundWorker).ReportProgress(pctDone), null, reportPeriod, reportPeriod))
             {
 
-                if((sender as BackgroundWorker).CancellationPending)
-                                    {
-                    e.Result = "Cancelled";
-                    break;
-                }
-
-                //report progress
-                int pctDone = (int)Math.Round((((double)sampleNumber / actualSamplesToBeWritten) * 10000), 0, MidpointRounding.AwayFromZero);
-                (sender as BackgroundWorker).ReportProgress(pctDone);
-
-
-                ulong skipToVal = (sampleNumber * homer.rowsPerSample);
-                ulong takeVal = homer.rowsPerSample;
-
-                if (skipToVal > homer.GetRowCount()) break;
-
-                if (skipToVal + takeVal > (ulong)rowsToSample.Length) takeVal = (ulong)rowsToSample.Length - skipToVal;
-
-                ulong[] subsample = rowsToSample.Skip((int)skipToVal).Take((int)takeVal).ToArray();
-
-                rowsToKeep = subsample.ToHashSet<ulong>();
-
-
-                #region Get Busy Writin' or Get Busy Dyin'
-
-                ulong rowsWritten = 0;
-
-                //first we need to open up our output filename
-                string filenameOut;
-                if (String.IsNullOrEmpty(homer.randSeedString))
-                {
-                    filenameOut = Path.Combine(homer.GetOutputLocation(), "subsample" + (sampleNumber + 1).ToString(filenamePadding) + ".csv");
-                }
-                else
-                {
-                    filenameOut = Path.Combine(homer.GetOutputLocation(), homer.randSeedString + "_subsample" + (sampleNumber + 1).ToString(filenamePadding) + ".csv");
-                }
-
-
-
-                try
+                for (ulong sampleNumber = 0; sampleNumber < homer.numberOfSamples; sampleNumber++)
                 {
 
-                
-
-                    using (FileStream fileStreamOut = new FileStream(filenameOut, FileMode.Create, FileAccess.Write, FileShare.None))
-                    using (StreamWriter streamWriter = new StreamWriter(fileStreamOut, homer.GetEncoding()))
+                    if ((sender as BackgroundWorker).CancellationPending)
                     {
-                        if (homer.HasHeader())
+                        e.Result = "Cancelled";
+                        break;
+                    }
+
+                    
+                    ulong skipToVal = (sampleNumber * homer.rowsPerSample);
+                    ulong takeVal = homer.rowsPerSample;
+
+                    if (skipToVal > homer.GetRowCount()) break;
+
+                    if (skipToVal + takeVal > (ulong)rowsToSample.Length) takeVal = (ulong)rowsToSample.Length - skipToVal;
+
+                    ulong[] subsample = rowsToSample.Skip((int)skipToVal).Take((int)takeVal).ToArray();
+
+                    rowsToKeep = subsample.ToHashSet<ulong>();
+
+
+                    #region Get Busy Writin' or Get Busy Dyin'
+
+                    ulong rowsWritten = 0;
+
+                    //first we need to open up our output filename
+                    string filenameOut;
+                    if (String.IsNullOrEmpty(homer.randSeedString))
+                    {
+                        filenameOut = Path.Combine(homer.GetOutputLocation(), "subsample" + (sampleNumber + 1).ToString(filenamePadding) + ".csv");
+                    }
+                    else
+                    {
+                        filenameOut = Path.Combine(homer.GetOutputLocation(), homer.randSeedString + "_subsample" + (sampleNumber + 1).ToString(filenamePadding) + ".csv");
+                    }
+
+
+
+                    try
+                    {
+
+
+
+                        using (FileStream fileStreamOut = new FileStream(filenameOut, FileMode.Create, FileAccess.Write, FileShare.None))
+                        using (StreamWriter streamWriter = new StreamWriter(fileStreamOut, homer.GetEncoding()))
                         {
-                            string[] headerRow;
-
-                            using (var fileStreamIn = File.OpenRead(homer.GetInputFile()))
-                            using (var streamReader = new StreamReader(fileStreamIn, encoding: homer.GetEncoding()))
+                            if (homer.HasHeader())
                             {
-                                var csvDat = CsvParser.ParseHeadAndTail(streamReader, homer.GetDelim(), homer.GetQuote());
+                                string[] headerRow;
 
-                                headerRow = csvDat.Item1.ToArray<string>();
-
-                                //write the header row
-                                streamWriter.Write(RowCleaner.CleanRow(headerRow, homer.GetDelim(), quoteString, escapedQuoteString, numCols, hoju.retainedIndices));
-
-                                ulong rowNumber = 0;
-                                string rowToWriteString;
-
-                                foreach (var line in csvDat.Item2)
+                                using (var fileStreamIn = File.OpenRead(homer.GetInputFile()))
+                                using (var streamReader = new StreamReader(fileStreamIn, encoding: homer.GetEncoding()))
                                 {
-                                    rowNumber++;
-                                    if (rowsToKeep.Contains(rowNumber))
+                                    var csvDat = CsvParser.ParseHeadAndTail(streamReader, homer.GetDelim(), homer.GetQuote());
+
+                                    headerRow = csvDat.Item1.ToArray<string>();
+
+                                    //write the header row
+                                    streamWriter.Write(RowCleaner.CleanRow(headerRow, homer.GetDelim(), quoteString, escapedQuoteString, numCols, hoju.retainedIndices));
+
+                                    ulong rowNumber = 0;
+                                    string rowToWriteString;
+
+                                    foreach (var line in csvDat.Item2)
                                     {
-                                        rowToWriteString = RowCleaner.CleanRow(line.ToArray<string>(), homer.GetDelim(), quoteString, escapedQuoteString, numCols, hoju.retainedIndices);
-                                        streamWriter.Write(rowToWriteString);
+                                        rowNumber++;
+                                        //calculate how far long we are
+                                        if (rowNumber % 1000 == 0) pctDone = calcPctDone(rowsWritten, homer.rowsPerSample, sampleNumber, homer.numberOfSamples);
 
-                                        rowsWritten++;
 
-                                        if (rowsWritten == homer.rowsPerSample) break;
+                                        if (rowsToKeep.Contains(rowNumber))
+                                        {
+                                            rowToWriteString = RowCleaner.CleanRow(line.ToArray<string>(), homer.GetDelim(), quoteString, escapedQuoteString, numCols, hoju.retainedIndices);
+                                            streamWriter.Write(rowToWriteString);
 
+                                            rowsWritten++;
+
+                                            if (rowsWritten == homer.rowsPerSample) break;
+
+                                        }
                                     }
                                 }
                             }
-                       }
-                        else
-                        {
-
-                            using (var fileStreamIn = File.OpenRead(homer.GetInputFile()))
-                            using (var streamReader = new StreamReader(fileStreamIn, encoding: homer.GetEncoding()))
+                            else
                             {
 
-                                var csvDat = CsvParser.Parse(streamReader, homer.GetDelim(), homer.GetQuote());
-                                ulong rowNumber = 0;
-                                foreach (var line in csvDat)
+                                using (var fileStreamIn = File.OpenRead(homer.GetInputFile()))
+                                using (var streamReader = new StreamReader(fileStreamIn, encoding: homer.GetEncoding()))
                                 {
-                                    rowNumber++;
-                                    if (rowsToKeep.Contains(rowNumber))
+
+                                    var csvDat = CsvParser.Parse(streamReader, homer.GetDelim(), homer.GetQuote());
+                                    ulong rowNumber = 0;
+                                    foreach (var line in csvDat)
                                     {
+                                        rowNumber++;
+                                        //calculate how far long we are
+                                        if (rowNumber % 1000 == 0) pctDone = calcPctDone(rowsWritten, homer.rowsPerSample, sampleNumber, homer.numberOfSamples);
 
-                                        string rowToWriteString = RowCleaner.CleanRow(line.ToArray<string>(), homer.GetDelim(), quoteString, escapedQuoteString, numCols, hoju.retainedIndices);
-                                        streamWriter.Write(rowToWriteString);
+                                        if (rowsToKeep.Contains(rowNumber))
+                                        {
 
-                                        rowsWritten++;
+                                            string rowToWriteString = RowCleaner.CleanRow(line.ToArray<string>(), homer.GetDelim(), quoteString, escapedQuoteString, numCols, hoju.retainedIndices);
+                                            streamWriter.Write(rowToWriteString);
 
-                                        if (rowsWritten == homer.rowsPerSample) break;
+                                            rowsWritten++;
 
+                                            if (rowsWritten == homer.rowsPerSample) break;
+
+                                        }
                                     }
+
+
                                 }
-
-
                             }
                         }
+                        #endregion
                     }
-                    #endregion
-                }
-                catch
-                {
-                    MessageBox.Show(genericProcessingError, "D'oh!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    e.Result = "Cancelled";
-                    return;
+                    catch
+                    {
+                        MessageBox.Show(genericProcessingError, "D'oh!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        e.Result = "Cancelled";
+                        return;
+                    }
+
                 }
 
+
             }
+
+            
 
 
 

@@ -1,5 +1,5 @@
 ﻿using System.Windows.Forms;
-
+using System;
 
 namespace royalsampler
 {
@@ -10,7 +10,7 @@ namespace royalsampler
         private void backgroundWorker_SubSampleProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
         {
             //MainProgressBar.Value = e.ProgressPercentage;
-            StatusLabel.Text = "Fetching and Writing subsample(s)... " + ((double)(e.ProgressPercentage / (double)100)).ToString(".00") + "% complete...";
+            StatusLabel.Text = "Fetching and Writing subsample(s)... " + ((double)(e.ProgressPercentage / (double)100)).ToString("0.00") + "% complete...";
         }
 
         private void backgroundWorker_SubSampleRunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
@@ -34,6 +34,17 @@ namespace royalsampler
             }
 
         }
+
+        internal static int calcPctDone(ulong rowNumber, ulong rowsPerSample, ulong sampleNumber, ulong numberOfSamples)
+        {
+            int pctDone = 0;
+            double pctDoneSamples = (double)sampleNumber / numberOfSamples;
+            double pctDoneRows = ((double)rowNumber / rowsPerSample) / numberOfSamples;
+            pctDone = (int)Math.Round(((pctDoneSamples + pctDoneRows) * 10000), 0, MidpointRounding.AwayFromZero);
+            return pctDone;
+        }
+
+
 
     }
 }
