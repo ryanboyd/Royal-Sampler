@@ -1,7 +1,7 @@
 # Royal Sampler
 Takes a large CSV file and subsamples into separate files. Can create both random subsamples (with and without replacement) or "targeted" subsamples of a CSV file. Useful for working with very large datasets that you would like to split into chunks, randomly subsample, or "peek" at specific row ranges.
 
-Compiled binary (and/or installer) available for download at https://www.ryanboyd.io/software/toolbox/#RoyalSampler
+Compiled binary (and/or installer) available for download at https://github.com/ryanboyd/Royal-Sampler/releases
 
 # Settings
 There are a bunch of settings in the application that are — I think — fairly self-explanatory if you understand that the purpose of the software is to take a big CSV file, then chop it down into one or more smaller CSV files. However, these things are often not nearly as obvious as the programmer things they are :)
