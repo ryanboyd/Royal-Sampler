@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net7.0-windows</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
     <RootNamespace>royalsampler</RootNamespace>
     <UseWindowsForms>true</UseWindowsForms>
     <StartupObject>royalsampler.Program</StartupObject>
@@ -38,15 +38,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Update="BGWorker - Split into Chunks.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Update="BGWorker - Split into Chunks.cs" />
     <Compile Update="BGWorker - Sample by Range.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Launch Split into Chunks.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Update="Launch Split into Chunks.cs" />
     <Compile Update="Launch Sample by Ranger.cs">
       <SubType>Form</SubType>
     </Compile>
