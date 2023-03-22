@@ -24,11 +24,17 @@ namespace royalsampler
                 }
             }
 
+            char[] quote_as_char_array = new char[quote.Length];
+            // Copy character by character into array 
+            for (int i = 0; i < quote.Length; i++)
+            {
+                quote_as_char_array[i] = quote[i];
+            }
 
             for (int i = 0; i < numCols; i++)
             {
-                if (rowToWrite[i].Contains(quote)) rowToWrite[i] = rowToWrite[i].Replace(quote, escQuote);
-                if (rowToWrite[i].Contains(delim) || rowToWrite[i].Contains('\r') || rowToWrite[i].Contains('\n')) rowToWrite[i] = quote + rowToWrite[i] + quote;
+                if (rowToWrite[i].Contains(quote)) rowToWrite[i] = quote + rowToWrite[i].Replace(quote, escQuote).Trim().Trim(quote_as_char_array) + quote;
+                if (rowToWrite[i].Contains(delim) || rowToWrite[i].Contains('\r') || rowToWrite[i].Contains('\n')) rowToWrite[i] = quote + rowToWrite[i].Trim().Trim(quote_as_char_array) + quote;
             }
 
 

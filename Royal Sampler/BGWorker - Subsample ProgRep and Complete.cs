@@ -24,7 +24,7 @@ namespace royalsampler
             //messagebox that it's done
             StatusLabel.Text = "Finished!";
 
-            if (e.Result != "Cancelled")
+            if ((string)e.Result != "Cancelled")
             {
                 MessageBox.Show("Your file has successfully been subsampled. Hooray!", "Woohoo!", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
